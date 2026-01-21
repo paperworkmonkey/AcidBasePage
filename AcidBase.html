@@ -38,7 +38,10 @@
         <input
           type="number"
           id="pHValue"
-          oninput="getSearchTerm()"
+          value="7.40"
+          min="6.80"
+          max="7.8"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -49,7 +52,10 @@
         <input
           type="number"
           id="pCO2Value"
-          oninput="getSearchTerm()"
+          value="5.00"
+          min="0.1"
+          max="20.0"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -60,7 +66,10 @@
         <input
           type="number"
           id="NaValue"
-          oninput="getSearchTerm()"
+          value="140"
+          min="90"
+          max="180"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -71,7 +80,10 @@
         <input
           type="number"
           id="KValue"
-          oninput="getSearchTerm()"
+          value="4.0"
+          min="0.1"
+          max="10.0"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -82,7 +94,10 @@
         <input
           type="number"
           id="ClValue"
-          oninput="getSearchTerm()"
+          value="100"
+          min="50"
+          max="150"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -93,7 +108,10 @@
         <input
           type="number"
           id="AlbuminValue"
-          oninput="getSearchTerm()"
+          value="40.0"
+          min="0.0"
+          max="60.0"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -104,7 +122,7 @@
         <input
           type="number"
           id="PO4Value"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -115,18 +133,18 @@
         <input
           type="number"
           id="LactateValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
-
+      <!-- 
       <div class="div17">Bicarb:</div>
       <div class="div18" id="BicarbBox">
         <label for="inputValue"></label>
         <input
           type="number"
           id="BicarbValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -137,7 +155,7 @@
         <input
           type="number"
           id="CaTotValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -148,7 +166,7 @@
         <input
           type="number"
           id="iCaValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -159,7 +177,7 @@
         <input
           type="number"
           id="BEValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -171,7 +189,7 @@
         <input
           type="number"
           id="MgValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -180,7 +198,7 @@
         <input
           type="number"
           id="pO4Value"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -190,7 +208,7 @@
         <input
           type="number"
           id="ethanolValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
@@ -199,13 +217,13 @@
         <input
           type="number"
           id="measSerumOsmValue"
-          oninput="getSearchTerm()"
+          oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
       <div class="div16"></div>
       <div class="div17"></div>
-      -->
+     -->
     </div>
 
     <script src="AcidBase.js"></script>
