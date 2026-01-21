@@ -15,7 +15,7 @@
   <body>
     <header class="top-row">
       <a href="" class="brand" aria-label="Homepage">
-        <img src="ICUonlineLogo.png" alt="Site logo" width="48" height="48" />
+        <!-- <img src="ICUonlineLogo.png" alt="Site logo" width="48" height="48" /> -->
         <span class="title">ICUonline</span>
       </a>
       <nav class="nav-links" role="navigation" aria-label="Top links">
@@ -40,7 +40,8 @@
           id="pHValue"
           value="7.40"
           min="6.80"
-          max="7.8"
+          max="7.80"
+          step="0.05"
           oninput="updateResult()"
           backgroundColor="red"
         />
@@ -51,7 +52,7 @@
         <label for="inputValue"></label>
         <input
           type="number"
-          id="pCO2Value"
+          id="PCO2Value"
           value="5.00"
           min="0.1"
           max="20.0"
@@ -102,8 +103,23 @@
         />
       </div>
 
-      <div class="div11">Albumin:</div>
-      <div class="div12" id="AlbuminBox">
+            <div class="div11"><HCO3></HCO3->:</div>
+      <div class="div12" id="BicarbBox">
+        <label for="inputValue"></label>
+        <input
+          type="number"
+          id="HCO3Value"
+          value="25.0"
+          min="1.0
+          max="60.0"
+          oninput="updateResult()"
+          backgroundColor="red"
+        />
+      </div>
+
+
+      <div class="div13">Albumin:</div>
+      <div class="div14" id="AlbuminBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -116,34 +132,29 @@
         />
       </div>
 
-      <div class="div13">PO4:</div>
-      <div class="div14" id="PO4Box">
+      <div class="div15">PO4:</div>
+      <div class="div16" id="PO4Box">
         <label for="inputValue"></label>
         <input
           type="number"
-          id="PO4Value"
+          id="PhosphateValue"
+          value="1.00"
+          min="0.01"
+          max="5.00"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div15">Lactate:</div>
-      <div class="div16" id="LactateBox">
+      <div class="div17">Lactate:</div>
+      <div class="div18" id="LactateBox">
         <label for="inputValue"></label>
         <input
           type="number"
           id="LactateValue"
-          oninput="updateResult()"
-          backgroundColor="red"
-        />
-      </div>
-      <!-- 
-      <div class="div17">Bicarb:</div>
-      <div class="div18" id="BicarbBox">
-        <label for="inputValue"></label>
-        <input
-          type="number"
-          id="BicarbValue"
+          value="1.00"
+          min="0.01"
+          max="20.00"
           oninput="updateResult()"
           backgroundColor="red"
         />
@@ -155,10 +166,46 @@
         <input
           type="number"
           id="CaTotValue"
+          value="1.00"
+          min="0.01"
+          max="5.00"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
+
+      <div class="div21">Mg:</div>
+      <div class="div22" id="MgBox">
+        <label for="inputValue"></label>
+        <input
+          type="number"
+          id="MgValue"
+          value="1.00"
+          min="0.01"
+          max="5.00"
+          oninput="updateResult()"
+          backgroundColor="red"
+        />
+      </div>
+
+      <div class="div21" id="result1">Result:</div>
+      <div class="div22" id="result"></div>
+      <div class="div23">Anion Gap:</div>
+      <div class="div24" id="AnionGapBox">Anion Gap:</div>
+      <div class="div25">SID:</div>
+      <div class="div26" id="SIDBox">SID:</div>
+
+      <!-- <div class="div18" id="BicarbBox">
+        <label for="inputValue"></label>
+        <input
+          type="number"
+          id="BicarbValue"
+          oninput="updateResult()"
+          backgroundColor="red"
+        />
+      </div>
+<!-- 
+      
 
       <div class="div21">iCa:</div>
       <div class="div22" id="iCaBox">
@@ -182,26 +229,8 @@
         />
       </div>
 
-      <div class="div21">Lactate:</div>
-
-      <div class="div10" id="MgBox">
-        <label for="inputValue">Mg: </label>
-        <input
-          type="number"
-          id="MgValue"
-          oninput="updateResult()"
-          backgroundColor="red"
-        />
-      </div>
-      <div class="div11" id="PO4Box">
-        <label for="inputValue">PO4: </label>
-        <input
-          type="number"
-          id="pO4Value"
-          oninput="updateResult()"
-          backgroundColor="red"
-        />
-      </div>
+    
+     
 
       <div class="div14" id="ethanolBox">
         <label for="inputValue">Ethanol: </label>
