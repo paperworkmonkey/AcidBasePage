@@ -37,6 +37,7 @@
         <label for="inputValue"></label>
         <input
           type="number"
+          width="150px"
           id="pHValue"
           value="7.40"
           min="6.80"
@@ -56,6 +57,7 @@
           value="5.00"
           min="0.1"
           max="20.0"
+          step="0.1"
           oninput="updateResult()"
           backgroundColor="red"
         />
@@ -103,7 +105,7 @@
         />
       </div>
 
-            <div class="div11"><HCO3></HCO3->:</div>
+            <div class="div11">HCO3:</div>
       <div class="div12" id="BicarbBox">
         <label for="inputValue"></label>
         <input
@@ -188,12 +190,35 @@
         />
       </div>
 
-      <div class="div21" id="result1">Result:</div>
-      <div class="div22" id="result"></div>
-      <div class="div23">Anion Gap:</div>
-      <div class="div24" id="AnionGapBox">Anion Gap:</div>
-      <div class="div25">SID:</div>
-      <div class="div26" id="SIDBox">SID:</div>
+      <div class="div25" id="result1">Result:</div>
+      <div class="div26" id="result"></div>
+      
+      <div class="div27">Anion Gap:</div>
+      <div class="div28" id="AnionGapBox"></div>
+      
+      <div class="div29">Anion Gap (corrected):</div>
+      <div class="div30" id="CorrAnionGapBox"></div>
+      
+      <div class="div31">SIDa:</div>
+      <div class="div32" id="SIDaBox"></div>
+       
+      <div class="div33">SIDe:</div>
+      <div class="div34" id="SIDeBox"></div>
+      
+          <div class="div35">SIG:</div>
+      <div class="div36" id="SIGBox"></div>
+
+      <div class="div37">Albumin Effect:</div>
+      <div class="div38" id="AlbuminEffectBox"></div>
+
+      <div class="div39">Na Effect:</div>
+      <div class="div40" id="NaEffectBox"></div>
+
+      <div class="div41">Cl Effect:</div>
+      <div class="div42" id="ClEffectBox"></div> 
+
+      <div class="div43">NaCl Effect:</div>
+      <div class="div44" id="NaClEffectBox"></div> 
 
       <!-- <div class="div18" id="BicarbBox">
         <label for="inputValue"></label>

@@ -113,6 +113,7 @@ canvas {
 .parent > div {
   display: flex;
   justify-content: left;
+  align-items: center;
   align-items: left;
   background: lightblue;
   border: 0px;
@@ -125,8 +126,8 @@ canvas {
 
 .parent {
   display: grid;
-  grid-template-columns: 75px 180px repeat(2, 180px) 1fr;
-  grid-template-rows: repeat(10, 25px);
+  grid-template-columns: 75px 180px 180px 180px 1fr;
+  grid-template-rows: repeat(10, 30px);
   grid-column-gap: 5px;
   grid-row-gap: 5px;
 }

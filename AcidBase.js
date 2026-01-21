@@ -72,25 +72,41 @@ function updateResult() {
     return;
   }
 
-  let myResult =
-    parseFloat(pHValue.value || 0) + // Use parseFloat to ensure numeric addition
-    parseFloat(PCO2Value.value || 0) +
-    parseFloat(HCO3Value.value || 0) +
-    parseFloat(NaValue.value || 0) +
-    parseFloat(KValue.value || 0) +
-    parseFloat(ClValue.value || 0) +
-    parseFloat(CaTotValue.value || 0) +
-    parseFloat(MgValue.value || 0) +
-    parseFloat(AlbuminValue.value || 0) +
-    parseFloat(PhosphateValue.value || 0) +
-    parseFloat(LactateValue.value || 0);
+  let pH = parseFloat(pHValue.value || 0);
+  let PCO2 = parseFloat(PCO2Value.value || 0);
+  let HCO3 = parseFloat(HCO3Value.value || 0);
+  let Na = parseFloat(NaValue.value || 0);
+  let K = parseFloat(KValue.value || 0);
+  let Cl = parseFloat(ClValue.value || 0);
+  let CaTot = parseFloat(CaTotValue.value || 0);
+  let Mg = parseFloat(MgValue.value || 0);
+  let Phosphate = parseFloat(PhosphateValue.value || 0);
+  let Lactate = parseFloat(LactateValue.value || 0);
+  let albumin = parseFloat(AlbuminValue.value || 0);
 
-  let AnionGap = NaValue.value - (ClValue.value + HCO3Value.value);
-  let SID = NaValue.value + KValue.value - (ClValue.value + LactateValue.value);
+  let AnionGap = Na + K - (Cl + HCO3);
+  let CorrAnionGap = Na - (Cl + HCO3) + 0.25 * (albumin - 40);
+  let SIDa = Na + K + CaTot + Mg - Cl - Lactate - Phosphate;
+  let SIDe = HCO3 + 0.38 * albumin + 1.5 * Phosphate;
+  let SIG = SIDa - SIDe;
+  let AlbuminEffect = (0.123 * pH - 0.631) * albumin;
+  let NaEffect = 0.3 * (Na - 140);
+  let ClEffect = 102 - (Cl * 140) / Na;
+  let NaClEffect = 0.3 * (Na - 14) + 102 - (Cl * 140) / Na;
+  // let LactateEffect = -1 * Lactate;
+  // let PhosphateEffect = -0.5 * Phosphate;
+  // let CaEffect = -0.25 * (CaTot - 2.25);
+  // let MgEffect = -0.15 * (Mg - 1);
 
-  document.getElementById("result").innerText = myResult;
   document.getElementById("AnionGapBox").innerText = AnionGap;
-  document.getElementById("SIDBox").innerText = SID;
+  document.getElementById("CorrAnionGapBox").innerText = CorrAnionGap;
+  document.getElementById("SIDaBox").innerText = SIDa;
+  document.getElementById("SIDeBox").innerText = SIDe;
+  document.getElementById("SIGBox").innerText = SIG;
+  document.getElementById("AlbuminEffectBox").innerText = AlbuminEffect;
+  document.getElementById("NaEffectBox").innerText = NaEffect;
+  document.getElementById("ClEffectBox").innerText = ClEffect;
+  document.getElementById("NaClEffectBox").innerText = NaClEffect;
 }
 
 function draw() {
