@@ -9,6 +9,7 @@ let MgValue;
 let AlbuminValue;
 let PhosphateValue;
 let LactateValue;
+let debugging = false;
 
 function setup() {
   // pHValue = document.getElementById("pHInput");
@@ -41,17 +42,19 @@ function updateResult() {
   let PhosphateValue = document.getElementById("PhosphateValue");
   let LactateValue = document.getElementById("LactateValue");
 
-  console.log("pHValue element:", pHValue.value);
-  console.log("PCO2Value element:", PCO2Value.value);
-  console.log("HCO3Value element:", HCO3Value.value);
-  console.log("NaValue element:", NaValue.value);
-  console.log("KValue element:", KValue.value);
-  console.log("ClValue element:", ClValue.value);
-  console.log("CaTotValue element:", CaTotValue.value);
-  console.log("MgValue element:", MgValue.value);
-  console.log("AlbuminValue element:", AlbuminValue.value);
-  console.log("PhosphateValue element:", PhosphateValue.value);
-  console.log("LactateValue element:", LactateValue.value);
+  if (debugging) {
+    // console.log("pHValue element:", pHValue.value);
+    // console.log("PCO2Value element:", PCO2Value.value);
+    // console.log("HCO3Value element:", HCO3Value.value);
+    // console.log("NaValue element:", NaValue.value);
+    // console.log("KValue element:", KValue.value);
+    // console.log("ClValue element:", ClValue.value);
+    // console.log("CaTotValue element:", CaTotValue.value);
+    // console.log("MgValue element:", MgValue.value);
+    // console.log("AlbuminValue element:", AlbuminValue.value);
+    // console.log("PhosphateValue element:", PhosphateValue.value);
+    // console.log("LactateValue element:", LactateValue.value);
+  }
 
   // Check if any of the elements are null before trying to access their 'value' property
   if (
@@ -86,29 +89,60 @@ function updateResult() {
 
   let AnionGap = Na + K - (Cl + HCO3);
   let CorrAnionGap = Na - (Cl + HCO3) + 0.25 * (albumin - 40);
+  let NormalAG = 0.2 * albumin + 1.5 * Phosphate + Lactate; // in mmol/L
   let SIDa = Na + K + CaTot + Mg - Cl - Lactate - Phosphate;
-  let SIDe = HCO3 + 0.38 * albumin + 1.5 * Phosphate;
-  let SIG = SIDa - SIDe;
+
   let AlbuminEffect = (0.123 * pH - 0.631) * albumin;
+  let CO2asBicarb = 0.23 * PCO2 * Math.pow(10, pH - 6.1);
+  let PhosphateEffect = Phosphate * (0.309 * pH - 0.469);
+  let SIDe = CO2asBicarb + AlbuminEffect + PhosphateEffect;
+  let SIG = SIDa - SIDe;
+
   let NaEffect = 0.3 * (Na - 140);
   let ClEffect = 102 - (Cl * 140) / Na;
   let NaClEffect = 0.3 * (Na - 14) + 102 - (Cl * 140) / Na;
-  // let LactateEffect = -1 * Lactate;
-  // let PhosphateEffect = -0.5 * Phosphate;
+  let LactateEffect = -1 * Lactate;
   // let CaEffect = -0.25 * (CaTot - 2.25);
   // let MgEffect = -0.15 * (Mg - 1);
+  // CO2  as bicarb =0.23 * pCO2 * 10^(pH - 6.1)
+  //phosphate (B12*(0.309*B9-0.469))
 
-  document.getElementById("AnionGapBox").innerText = AnionGap;
-  document.getElementById("CorrAnionGapBox").innerText = CorrAnionGap;
-  document.getElementById("SIDaBox").innerText = SIDa;
-  document.getElementById("SIDeBox").innerText = SIDe;
-  document.getElementById("SIGBox").innerText = SIG;
-  document.getElementById("AlbuminEffectBox").innerText = AlbuminEffect;
-  document.getElementById("NaEffectBox").innerText = NaEffect;
-  document.getElementById("ClEffectBox").innerText = ClEffect;
-  document.getElementById("NaClEffectBox").innerText = NaClEffect;
+  document.getElementById("AnionGapBox").innerText =
+    Number(AnionGap).toFixed(1);
+  document.getElementById("CorrAnionGapBox").innerText =
+    Number(CorrAnionGap).toFixed(1);
+  document.getElementById("SIDaBox").innerText = Number(SIDa).toFixed(1);
+  document.getElementById("SIDeBox").innerText = Number(SIDe).toFixed(1);
+  document.getElementById("SIGBox").innerText = Number(SIG).toFixed(1);
+  document.getElementById("AlbuminEffectBox").innerText =
+    Number(AlbuminEffect).toFixed(1);
+  document.getElementById("NaClEffectBox").innerText =
+    Number(NaClEffect).toFixed(1);
+  document.getElementById("LactateEffectBox").innerText =
+    Number(LactateEffect).toFixed(1);
+  document.getElementById("PhosphateEffectBox").innerText =
+    Number(PhosphateEffect).toFixed(1);
+  document.getElementById("CO2asBicarbBox").innerText =
+    Number(CO2asBicarb).toFixed(1);
+
+  drawGamblegram();
 }
 
-function draw() {
-  background(220);
+function drawGamblegram() {
+  // Placeholder function for drawing the Gamblegram
+  console.log("Drawing Gamblegram...");
+
+  // function draw() {
+  //   background(220);
+
+  //draw Na
+  //draw K
+  //draw Ca
+  //draw Mg
+
+  //draw Cl
+  //draw HCO3
+  //draw Albumin
+  //draw Lactate
+  //draw Phosphate
 }

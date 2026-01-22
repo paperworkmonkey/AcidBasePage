@@ -32,8 +32,8 @@
     </header>
 
     <div class="parent">
-      <div class="div1">pH:</div>
-      <div class="div2" id="pHBox">
+      <div class="div1a">pH:</div>
+      <div class="div1b" id="pHBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -42,14 +42,14 @@
           value="7.40"
           min="6.80"
           max="7.80"
-          step="0.05"
+          step="0.01"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div3">pCO2:</div>
-      <div class="div4" id="pCO2Box">
+      <div class="div2a">pCO2:</div>
+      <div class="div2b" id="pCO2Box">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -63,8 +63,8 @@
         />
       </div>
 
-      <div class="div5">Na:</div>
-      <div class="div6" id="NaBox">
+      <div class="div3a">Na:</div>
+      <div class="div3b" id="NaBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -77,8 +77,8 @@
         />
       </div>
 
-      <div class="div7">K:</div>
-      <div class="div8" id="KBox">
+      <div class="div4a">K:</div>
+      <div class="div4b" id="KBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -86,13 +86,14 @@
           value="4.0"
           min="0.1"
           max="10.0"
+          step="0.1"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div9">Cl:</div>
-      <div class="div10" id="ClBox">
+      <div class="div5a">Cl:</div>
+      <div class="div5b" id="ClBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -105,8 +106,8 @@
         />
       </div>
 
-            <div class="div11">HCO3:</div>
-      <div class="div12" id="BicarbBox">
+            <div class="div6a">HCO3:</div>
+      <div class="div6b" id="BicarbBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -120,8 +121,8 @@
       </div>
 
 
-      <div class="div13">Albumin:</div>
-      <div class="div14" id="AlbuminBox">
+      <div class="div7a">Albumin:</div>
+      <div class="div7b" id="AlbuminBox">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -134,8 +135,8 @@
         />
       </div>
 
-      <div class="div15">PO4:</div>
-      <div class="div16" id="PO4Box">
+      <div class="div8a">PO4:</div>
+      <div class="div8b" id="PO4Box">
         <label for="inputValue"></label>
         <input
           type="number"
@@ -143,92 +144,90 @@
           value="1.00"
           min="0.01"
           max="5.00"
+          step="0.01"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div17">Lactate:</div>
-      <div class="div18" id="LactateBox">
+      <div class="div9a">Lactate:</div>
+      <div class="div9b" id="LactateBox">
         <label for="inputValue"></label>
         <input
           type="number"
           id="LactateValue"
           value="1.00"
-          min="0.01"
+          min="0.30"
           max="20.00"
+          step="0.1"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div19">Ca(tot):</div>
-      <div class="div20" id="CaBox">
+      <div class="div10a">Ca(tot):</div>
+      <div class="div10b" id="CaBox">
         <label for="inputValue"></label>
         <input
           type="number"
           id="CaTotValue"
-          value="1.00"
-          min="0.01"
+          value="2.30"
+          min="0.20"
           max="5.00"
+          step="0.1"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div21">Mg:</div>
-      <div class="div22" id="MgBox">
+      <div class="div11a">Mg:</div>
+      <div class="div11b" id="MgBox">
         <label for="inputValue"></label>
         <input
           type="number"
           id="MgValue"
-          value="1.00"
-          min="0.01"
+          value="1.0"
+          min="0.10"
           max="5.00"
+          step="0.1"
           oninput="updateResult()"
           backgroundColor="red"
         />
       </div>
 
-      <div class="div25" id="result1">Result:</div>
-      <div class="div26" id="result"></div>
+      <div class="divR1a" id="result1">Result:</div>
+      <div class="divR1b" id="result"></div>
       
-      <div class="div27">Anion Gap:</div>
-      <div class="div28" id="AnionGapBox"></div>
-      
-      <div class="div29">Anion Gap (corrected):</div>
-      <div class="div30" id="CorrAnionGapBox"></div>
-      
-      <div class="div31">SIDa:</div>
-      <div class="div32" id="SIDaBox"></div>
+      <div class="divR2a">Anion Gap:</div>
+      <div class="divR2b" id="AnionGapBox"></div>
+
+      <div class="divR3a">Anion Gap (corrected):</div>
+      <div class="divR3b" id="CorrAnionGapBox"></div>
+
+      <div class="divR4a">SIDa:</div>
+      <div class="divR4b" id="SIDaBox"></div>
        
-      <div class="div33">SIDe:</div>
-      <div class="div34" id="SIDeBox"></div>
-      
-          <div class="div35">SIG:</div>
-      <div class="div36" id="SIGBox"></div>
+      <div class="divR5a">SIDe:</div>
+      <div class="divR5b" id="SIDeBox"></div>
 
-      <div class="div37">Albumin Effect:</div>
-      <div class="div38" id="AlbuminEffectBox"></div>
+      <div class="divR6a">SIG:</div>
+      <div class="divR6b" id="SIGBox"></div>
 
-      <div class="div39">Na Effect:</div>
-      <div class="div40" id="NaEffectBox"></div>
+      <div class="divR7a">Albumin Effect:</div>
+      <div class="divR7b" id="AlbuminEffectBox"></div>
 
-      <div class="div41">Cl Effect:</div>
-      <div class="div42" id="ClEffectBox"></div> 
+      <div class="divR8a">NaCl Effect:</div>
+      <div class="divR8b" id="NaClEffectBox"></div> 
 
-      <div class="div43">NaCl Effect:</div>
-      <div class="div44" id="NaClEffectBox"></div> 
+      <div class="divR9a">Lactate Effect:</div>
+      <div class="divR9b" id="LactateEffectBox"></div> 
 
-      <!-- <div class="div18" id="BicarbBox">
-        <label for="inputValue"></label>
-        <input
-          type="number"
-          id="BicarbValue"
-          oninput="updateResult()"
-          backgroundColor="red"
-        />
-      </div>
+      <div class="divR10a">CO2 as bicarb:</div>
+      <div class="divR10b" id="CO2asBicarbBox"></div>
+
+      <div class="divR11a">Phosphate Effect:</div>
+      <div class="divR11b" id="PhosphateEffectBox"></div>
+  
 <!-- 
       
 
