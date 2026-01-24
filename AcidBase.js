@@ -17,6 +17,10 @@ let sBEHb50;
 let sBEHbPt;
 let debugging = false;
 
+function preload() {
+  img = loadImage("/Acid-base_nomogram.svg.png");
+}
+
 function setup() {
   // pHValue = document.getElementById("pHInput");
   // PCO2Value = document.getElementById("PCO2Input");
@@ -33,7 +37,7 @@ function setup() {
   // UreaValue = document.getElementById("UreaInput");
   // GlucoseValue = document.getElementById("GlucoseInput");
 
-  noCanvas();
+  createCanvas(400, 400);
   updateResult();
 }
 
@@ -140,6 +144,9 @@ function updateResult() {
     (CO2asBicarb - 24.4 + (2.3 * (Hb / 10) + 7.7) * (pH - 7.4)) *
     (1 - (0.023 * Hb) / 10);
 
+  let DeltaGap = AnionGap - 12 - (HCO3 - 24);
+  let DeltaRatio = DeltaGap / (24 - HCO3);
+
   let OsmCalc = 2 * (Na + K) + Ur + Gluc;
   let OsmGap = MeasuredOsm - OsmCalc;
 
@@ -163,14 +170,21 @@ function updateResult() {
   document.getElementById("sBEHb50Box").innerText = Number(sBEHb50).toFixed(1);
   document.getElementById("sBEHbPtBox").innerText = Number(sBEHbPt).toFixed(1);
   document.getElementById("OsmGapBox").innerText = Number(OsmGap).toFixed(1);
+  document.getElementById("DeltaGapBox").innerText =
+    Number(DeltaGap).toFixed(1);
+  document.getElementById("DeltaRatioBox").innerText =
+    Number(DeltaRatio).toFixed(2);
 
   drawGamblegram();
   updateInterpretation();
+  plotSiggardAndersson(pH, HCO3);
 }
 
 function drawGamblegram() {
   // Placeholder function for drawing the Gamblegram
-  console.log("Drawing Gamblegram...");
+  if (debugging) {
+    console.log("Drawing Gamblegram...");
+  }
 
   // function draw() {
   //   background(220);
@@ -188,28 +202,81 @@ function drawGamblegram() {
 }
 
 function updateInterpretation() {
-  //console.log("Updating Interpretation...");
-  console.log(pH);
-  let aemia;
-  if (pH < 7.35) {
-    aemia = "acidaemia";
-    if (PCO2 < 4.0) {
-      aemia += " with respiratory compensation";
-    } else if (PCO2 > 6.0) {
-      aemia += " with respiratory acidosis";
-    }
-  } else if (pH > 7.45) {
-    aemia = "alkalaemia";
-    if (sBEHbPt < -2) {
-      aemia += " with metabolic compensation";
-    } else if (sBEHbPt > 2) {
-      aemia += " with metabolic alkalosis";
-    }
-  } else {
-    aemia = "normal pH";
+  if (debugging) {
+    console.log("Updating Interpretation...");
+    console.log(pH);
   }
 
-  let interpretationText = `The patient has ${aemia}. `;
+  let acidFlag = false;
+  let aemia;
+  // if (pH < 7.35) {
+  //   acidFlag=true;
+  //   aemia = "acidaemia";
+  //   if (sBEHbPt < -2) {
+  //     aemia += " with metabolic acidosis";
+  //   } else if (sBEHbPt > 2) {
+  //     aemia += " with metabolic compensation";
+  //   }
+  // } else if (pH > 7.45) {
+  //   aemia = "alkalaemia";
+  //   if (sBEHbPt < -2) {
+  //     aemia += " with metabolic compensation";
+  //   } else if (sBEHbPt > 2) {
+  //     aemia += " with metabolic alkalosis";
+  //   }
+  // } else {
+  //   aemia = "normal pH";
+  // }
+
+  if (pH < 7.35) {
+    console.log("acidaemia");
+    acidFlag = true;
+    aemia = "acidaemia";
+    if (sBEHbPt < -2 && PCO2 < 4.0) {
+      aemia += " due to a metabolic acidosis with respiratory compensation";
+    }
+
+    if (sBEHbPt < -2 && PCO2 > 4.0 && PCO2 <= 6.0) {
+      aemia += " due to a pure metabolic acidosis";
+    }
+
+    if (sBEHbPt < -2 && PCO2 > 6.0) {
+      aemia += " due to a mixed metabolic and respiratory acidosis";
+    }
+
+    if (sBEHbPt > 2 && PCO2 > 6.0) {
+      aemia += " due to a respiratory acidosis with metabolic compensation";
+    }
+    if (sBEHbPt > -2 && sBEHb50 < 2 && PCO2 > 6.0) {
+      aemia += " due to a respiratory acidosis without metabolic compensation";
+    }
+  }
+
+  let interpretationText = `This represents ${aemia}. `;
 
   document.getElementById("interpretationBox").innerText = interpretationText;
+}
+
+function plotSiggardAndersson(pH, HCO3) {
+  if (debugging) {
+    //console.log("Plotting Siggard-Andersson nomogram...");
+  }
+
+  clear();
+
+  // Draw border and image
+  stroke(0); // Black color
+  strokeWeight(2); // Border thickness
+  noFill(); // Do not fill the rectangle
+  rect(0, 0, width, height);
+  image(img, 0, 0, width, height);
+
+  // Plot the point based on pH and HCO3
+  let x = map(pH, 7.8, 7.0, width - 15, 40); // Adjust these values as needed
+  let y = map(HCO3, 0, 60, height - 25, 30); // Adjust these values as needed
+  constrain(x, 40, width - 15);
+  constrain(y, 3, height - 25);
+  fill(255, 0, 0);
+  noStroke();
+  ellipse(x, y, 10, 10);
 }

@@ -31,6 +31,8 @@
       </nav>
     </header>
 
+    <h4>Stewart Acid Base Calculator</h4>
+
     <div class="parent">
       <div class="div1a">pH:</div>
       <div class="div1b" id="pHBox">
@@ -256,51 +258,73 @@
 
       <div class="divR1a" id="result1">Result:</div>
       <div class="divR1b" id="result"></div>
+      <div class="divR1c">Reference ranges</div>
 
       <div class="divR2a">Anion Gap:</div>
       <div class="divR2b" id="AnionGapBox"></div>
+      <div class="divR2c">8-16 mmol/L</div>
 
       <div class="divR3a">Anion Gap (corrected):</div>
       <div class="divR3b" id="CorrAnionGapBox"></div>
+      <div class="divR3c">12-20 mmol/L</div>
 
       <div class="divR4a" style="background-color: palegreen">
         Albumin Effect:
       </div>
       <div class="divR4b" id="AlbuminEffectBox"></div>
+      <div class="divR4c">???</div>
 
       <div class="divR5a" style="background-color: palegreen">
         CO2 as bicarb:
       </div>
       <div class="divR5b" id="CO2asBicarbBox"></div>
+      <div class="divR5c">22-26 mmol/L</div>
 
       <div class="divR6a" style="background-color: palegreen">
         Phosphate Effect:
       </div>
       <div class="divR6b" id="PhosphateEffectBox"></div>
+      <div class="divR6c">???</div>
 
       <div class="divR7a" style="background-color: green">SIDe:</div>
       <div class="divR7b" id="SIDeBox"></div>
+      <div class="divR7c">38-42 mmol/L</div>
 
       <div class="divR8a">SIDa:</div>
       <div class="divR8b" id="SIDaBox"></div>
+      <div class="divR8c">40-44 mmol/L</div>
 
       <div class="divR9a">SIG:</div>
       <div class="divR9b" id="SIGBox"></div>
+      <div class="divR9c">-2 to +2 mmol/L</div>
 
       <div class="divR10a">NaCl Effect:</div>
       <div class="divR10b" id="NaClEffectBox"></div>
+      <div class="divR10c">???</div>
 
       <div class="divR11a">Lactate Effect:</div>
       <div class="divR11b" id="LactateEffectBox"></div>
+      <div class="divR11c">0-2 mmol/L</div>
 
       <div class="divR12a">sBE (Hb 50):</div>
       <div class="divR12b" id="sBEHb50Box"></div>
+      <div class="divR12c">-2 to +2 mmol/L</div>
 
       <div class="divR13a">sBE (Hb patient):</div>
       <div class="divR13b" id="sBEHbPtBox"></div>
+      <div class="divR13c">-2 to +2 mmol/L</div>
 
-      <div class="divR14a">Osm gap:</div>
-      <div class="divR14b" id="OsmGapBox"></div>
+      <div class="divR14a">Delta ratio:</div>
+      <div class="divR14b" id="DeltaRatioBox"></div>
+      <div class="divR14c">0.8-2</div>
+
+      <div class="divR15a">Delta gap:</div>
+      <div class="divR15b" id="DeltaGapBox"></div>
+      <div class="divR15c">-2 to +2 mmol/L</div>
+
+      <div class="divR16a">Osm gap:</div>
+      <div class="divR16b" id="OsmGapBox"></div>
+      <div class="divR16c">0-10 mmol/L</div>
 
       <!-- 
       <div class="div21">iCa:</div>
@@ -349,7 +373,12 @@
       <div class="div16"></div>
       <div class="div17"></div> -->
     </div>
+
+<!-- <img src="Acid-base_nomogram.svg.png" alt="Stewart Figure 1" style="max-width: 600px; margin-top: 20px;"/>     -->
 <p class = "interpretation" id="interpretationBox" style="font-weight: bold; font-size: 1.2em; margin-top: 20px;">Interpretation here.</p>
-    <script src="AcidBase.js"></script>
+    
+<p>Delta Ratio < 1: Suggests a concurrent normal anion gap metabolic acidosis (NAGMA).</p>
+<p>Delta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate. </p>
+<script src="AcidBase.js"></script>
   </body>
 </html>

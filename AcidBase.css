@@ -12,7 +12,7 @@
 html,
 body {
   height: 100%;
-  margin: 0;
+  margin: 10;
   font-family:
     Inter,
     system-ui,
@@ -126,7 +126,7 @@ canvas {
 
 .parent {
   display: grid;
-  grid-template-columns: 75px 180px 180px 180px 1fr;
+  grid-template-columns: 75px 180px 180px 50px 150px;
   grid-template-rows: repeat(17, 30px);
   grid-column-gap: 5px;
   grid-row-gap: 5px;
@@ -237,11 +237,17 @@ canvas {
 .divR1b {
   grid-area: 1 / 4 / 2 / 5;
 }
+.divR1c {
+  grid-area: 1 / 5 / 2 / 6;
+}
 .divR2a {
   grid-area: 2 / 3 / 3 / 4;
 }
 .divR2b {
   grid-area: 2 / 4 / 3 / 5;
+}
+.divR2c {
+  grid-area: 2 / 5 / 3 / 6;
 }
 .divR3a {
   grid-area: 3 / 3 / 4 / 4;
@@ -249,11 +255,17 @@ canvas {
 .divR3b {
   grid-area: 3 / 4 / 4 / 5;
 }
+.divR3c {
+  grid-area: 3 / 5 / 4 / 6;
+}
 .divR4a {
   grid-area: 4 / 3 / 5 / 4;
 }
 .divR4b {
   grid-area: 4 / 4 / 5 / 5;
+}
+.divR4c {
+  grid-area: 4 / 5 / 5 / 6;
 }
 .divR5a {
   grid-area: 5 / 3 / 6 / 4;
@@ -261,11 +273,17 @@ canvas {
 .divR5b {
   grid-area: 5 / 4 / 6 / 5;
 }
+.divR5c {
+  grid-area: 5 / 5 / 6 / 6;
+}
 .divR6a {
   grid-area: 6 / 3 / 7 / 4;
 }
 .divR6b {
   grid-area: 6 / 4 / 7 / 5;
+}
+.divR6c {
+  grid-area: 6 / 5 / 7 / 6;
 }
 .divR7a {
   grid-area: 7 / 3 / 8 / 4;
@@ -273,11 +291,17 @@ canvas {
 .divR7b {
   grid-area: 7 / 4 / 8 / 5;
 }
+.divR7c {
+  grid-area: 7 / 5 / 8 / 6;
+}
 .divR8a {
   grid-area: 8 / 3 / 9 / 4;
 }
 .divR8b {
   grid-area: 8 / 4 / 9 / 5;
+}
+.divR8c {
+  grid-area: 8 / 5 / 9 / 6;
 }
 .divR9a {
   grid-area: 9 / 3 / 10 / 4;
@@ -285,11 +309,17 @@ canvas {
 .divR9b {
   grid-area: 9 / 4 / 10 / 5;
 }
+.divR9c {
+  grid-area: 9 / 5 / 10 / 6;
+}
 .divR10a {
   grid-area: 10 / 3 / 11 / 4;
 }
 .divR10b {
   grid-area: 10 / 4 / 11 / 5;
+}
+.divR10c {
+  grid-area: 10 / 5 / 11 / 6;
 }
 .divR11a {
   grid-area: 11 / 3 / 12 / 4;
@@ -297,11 +327,17 @@ canvas {
 .divR11b {
   grid-area: 11 / 4 / 12 / 5;
 }
+.divR11c {
+  grid-area: 11 / 5 / 12 / 6;
+}
 .divR12a {
   grid-area: 12 / 3 / 13 / 4;
 }
 .divR12b {
   grid-area: 12 / 4 / 13 / 5;
+}
+.divR12c {
+  grid-area: 12 / 5 / 13 / 6;
 }
 .divR13a {
   grid-area: 13 / 3 / 14 / 4;
@@ -309,17 +345,35 @@ canvas {
 .divR13b {
   grid-area: 13 / 4 / 14 / 5;
 }
+.divR13c {
+  grid-area: 13 / 5 / 14 / 6;
+}
 .divR14a {
   grid-area: 14 / 3 / 15 / 4;
 }
 .divR14b {
   grid-area: 14 / 4 / 15 / 5;
 }
+.divR14c {
+  grid-area: 14 / 5 / 15 / 6;
+}
 .divR15a {
   grid-area: 15 / 3 / 16 / 4;
 }
 .divR15b {
   grid-area: 15 / 4 / 16 / 5;
+}
+.divR15c {
+  grid-area: 15 / 5 / 16 / 6;
+}
+.divR16a {
+  grid-area: 16 / 3 / 17 / 4;
+}
+.divR16b {
+  grid-area: 16 / 4 / 17 / 5;
+}
+.divR16c {
+  grid-area: 16 / 5 / 17 / 6;
 }
 
 .interpretation {
