@@ -18,7 +18,10 @@ let sBEHbPt;
 let debugging = false;
 
 function preload() {
-  img = loadImage("/Acid-base_nomogram.svg.png");
+  //img = loadImage("/Acid-base_nomogram.svg.png");
+  img = loadImage(
+    "https://icuonline.co.uk/AcidBasePageAcid-base_nomogram.svg.png",
+  );
 }
 
 function setup() {
