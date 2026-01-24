@@ -22,21 +22,6 @@ function preload() {
 }
 
 function setup() {
-  // pHValue = document.getElementById("pHInput");
-  // PCO2Value = document.getElementById("PCO2Input");
-  // HCO3Value = document.getElementById("HCO3Input");
-  // NaValue = document.getElementById("NaInput");
-  // KValue = document.getElementById("KInput");
-  // ClValue = document.getElementById("ClInput");
-  // CaValue = document.getElementById("CaInput");
-  // MgValue = document.getElementById("MgInput");
-  // AlbuminValue = document.getElementById("AlbuminInput");
-  // PhosphateValue = document.getElementById("PhosphateInput");
-  // LactateValue = document.getElementById("LactateInput");
-  // MeasuredOsm = document.getElementById("MeasuredOsmInput");
-  // UreaValue = document.getElementById("UreaInput");
-  // GlucoseValue = document.getElementById("GlucoseInput");
-
   createCanvas(400, 400);
   updateResult();
 }
@@ -61,21 +46,21 @@ function updateResult() {
   let GlucoseValue = document.getElementById("GlucoseValue");
 
   if (debugging) {
-    // console.log("pHValue element:", pHValue.value);
-    // console.log("PCO2Value element:", PCO2Value.value);
-    // console.log("HCO3Value element:", HCO3Value.value);
-    // console.log("NaValue element:", NaValue.value);
-    // console.log("KValue element:", KValue.value);
-    // console.log("ClValue element:", ClValue.value);
-    // console.log("CaTotValue element:", CaTotValue.value);
-    // console.log("MgValue element:", MgValue.value);
-    // console.log("AlbuminValue element:", AlbuminValue.value);
-    // console.log("PhosphateValue element:", PhosphateValue.value);
-    // console.log("LactateValue element:", LactateValue.value);
-    // console.log("HbValue element:", HbValue.value);
-    // console.log("MeasuredOsmValue element:", MeasuredOsmValue.value);
-    // console.log("UreaValue element:", UreaValue.value);
-    // console.log("GlucoseValue element:", GlucoseValue.value);
+    console.log("pHValue element:", pHValue.value);
+    console.log("PCO2Value element:", PCO2Value.value);
+    console.log("HCO3Value element:", HCO3Value.value);
+    console.log("NaValue element:", NaValue.value);
+    console.log("KValue element:", KValue.value);
+    console.log("ClValue element:", ClValue.value);
+    console.log("CaTotValue element:", CaTotValue.value);
+    console.log("MgValue element:", MgValue.value);
+    console.log("AlbuminValue element:", AlbuminValue.value);
+    console.log("PhosphateValue element:", PhosphateValue.value);
+    console.log("LactateValue element:", LactateValue.value);
+    console.log("HbValue element:", HbValue.value);
+    console.log("MeasuredOsmValue element:", MeasuredOsmValue.value);
+    console.log("UreaValue element:", UreaValue.value);
+    console.log("GlucoseValue element:", GlucoseValue.value);
   }
 
   // Check if any of the elements are null before trying to access their 'value' property
@@ -259,7 +244,9 @@ function updateInterpretation() {
 
 function plotSiggardAndersson(pH, HCO3) {
   if (debugging) {
-    //console.log("Plotting Siggard-Andersson nomogram...");
+    console.log("Plotting Siggard-Andersson nomogram...");
+    console.log(img);
+    console.log(canvas);
   }
 
   clear();
@@ -272,10 +259,24 @@ function plotSiggardAndersson(pH, HCO3) {
   image(img, 0, 0, width, height);
 
   // Plot the point based on pH and HCO3
-  let x = map(pH, 7.8, 7.0, width - 15, 40); // Adjust these values as needed
-  let y = map(HCO3, 0, 60, height - 25, 30); // Adjust these values as needed
-  constrain(x, 40, width - 15);
-  constrain(y, 3, height - 25);
+  // let x = map(pH, 7.8, 7.0, width - 15, 40); // Adjust these values as needed
+  // let y = map(HCO3, 0, 60, height - 25, 30); // Adjust these values as needed
+  let plotXstart = (38 / 400) * width;
+  let plotYstart = (30 / 400) * height;
+
+  let plotWidth = ((400 - 10) / 400) * width;
+  let plotHeight = ((400 - 25) / 400) * height;
+
+  let x = map(pH, 7.0, 7.8, plotXstart, plotWidth); // Adjust these values as needed
+  let y = map(HCO3, 0, 60, plotHeight, plotYstart); // Adjust these values as needed
+
+  x = constrain(x, plotXstart, plotWidth);
+  y = constrain(y, plotYstart, plotHeight);
+
+  if (debugging) {
+    console.log(`Mapped coordinates: x=${x}, y=${y}`);
+  }
+
   fill(255, 0, 0);
   noStroke();
   ellipse(x, y, 10, 10);
