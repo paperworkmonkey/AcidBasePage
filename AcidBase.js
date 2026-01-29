@@ -24,6 +24,7 @@ let Ur;
 let Gluc;
 let albumin;
 let OsmGap;
+let DeltaRatio;
 
 let img;
 let debugging = false;
@@ -157,7 +158,7 @@ function updateResult() {
 
   let DeltaGap = AnionGap - 12 - (HCO3 - 24);
 
-  let DeltaRatio = DeltaGap / (24 - HCO3);
+  DeltaRatio = DeltaGap / (24 - HCO3);
 
   let OsmCalc = 2 * (Na + K) + Ur + Gluc;
   OsmGap = MeasuredOsm - OsmCalc;
@@ -391,9 +392,21 @@ function updateInterpretation() {
     if (AnionGap > 16) {
       debugg("well AG is high ");
       interpretationText += "\nHigh anion gap metabolic acidosis.";
+
+      //Delta ratios
+      if (DeltaRatio >= 2) {
+        interpretationText += "\nDelta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate."
+      }
+      // else if (DeltaRatio > 1 && DeltaRatio < 2) {
+      //   interpretationText += "\nDelta ratio indeterminate."
+      // }
+      if (DeltaRatio < 1) {
+        interpretationText += "\nPure NAGMA";
+      }
+
+      //osmolar gap
       if (OsmGap >= 16) {
-        interpretationText +=
-          " Raised osmolar gap — consider toxic alcohol ingestion.";
+        interpretationText += " Raised osmolar gap — consider toxic alcohol ingestion.";
       }
     } else if (AnionGap <= 16) {
       debugg("well AG is LOW!! ");
@@ -401,14 +414,14 @@ function updateInterpretation() {
     }
   }
 
-  if (NaClEffect < -4) {
+
+  if (NaClEffect <= -4) {
     interpretationText += "\nHyperchaloraemic acidosis"
   }
 
   if (AlbuminEffect < 10) {
     interpretationText += "\nHypoalbuminaemic alkalosis"
   }
-
 
   debugg(interpretationText);
   document.getElementById("interpretationBox").innerText = interpretationText;
