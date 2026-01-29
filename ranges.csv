@@ -1,0 +1,16 @@
+Value, min, max, rangeMin, rangeMax
+AnionGap, 8, 16, 0, 30
+CorrectedAnionGap, 12, 20
+AlbuminEffect, 10, 12
+CO2asBicarb, 22, 26
+PhosphateEffect, 0, 4
+SIDe, 38, 42
+SIDa, 40, 44
+SIG, -2, +2
+NaClEffect, -4, 4
+LactateEffect, -2, 2
+sBEHb50, -2, 2
+sBEHbPt, -2, 2
+DeltaRatio, 0.4, 2.0
+DeltaGap, 0.0, 6.0
+OsmGap, 10, 20
