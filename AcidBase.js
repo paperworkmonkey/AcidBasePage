@@ -15,7 +15,19 @@ let Urea;
 let Glucose;
 let sBEHb50;
 let sBEHbPt;
+let AnionGap;
+let CorrAnionGap;
+let SIDa;
+let SIDe;
+let SIG;
+let Ur;
+let Gluc;
+let albumin;
+let OsmGap;
+
+let img;
 let debugging = false;
+let ranges;
 //let img1, img2;
 
 function preload() {
@@ -24,11 +36,14 @@ function preload() {
   //   "https://icuonline.co.uk/AcidBase/Acid-base_nomogram.svg.png",
   // );
   //let img2 = loadImage("/Acid-base_nomogram.svg.png");
+
+  ranges = loadTable("ranges.csv", "csv", "header");
 }
 
 function setup() {
   createCanvas(400, 400);
   updateResult();
+  console.log(ranges);
 }
 
 function updateResult() {
@@ -107,21 +122,21 @@ function updateResult() {
   Ur = parseFloat(UreaValue.value || 0);
   Gluc = parseFloat(GlucoseValue.value || 0);
 
-  let AnionGap = Na + K - (Cl + HCO3);
-  let CorrAnionGap = Na - (Cl + HCO3) + 0.25 * (albumin - 40);
+  AnionGap = Na + K - (Cl + HCO3);
+  CorrAnionGap = Na - (Cl + HCO3) + 0.25 * (albumin - 40);
   let NormalAG = 0.2 * albumin + 1.5 * Phosphate + Lactate; // in mmol/L
-  let SIDa = Na + K + CaTot + Mg - Cl - Lactate;
+  SIDa = Na + K + CaTot + Mg - Cl - Lactate;
 
-  let AlbuminEffect = (0.123 * pH - 0.631) * albumin;
-  let CO2asBicarb = 0.23 * PCO2 * Math.pow(10, pH - 6.1);
-  let PhosphateEffect = Phosphate * (0.309 * pH - 0.469);
-  let SIDe = CO2asBicarb + AlbuminEffect + PhosphateEffect;
-  let SIG = SIDa - SIDe;
+  AlbuminEffect = (0.123 * pH - 0.631) * albumin;
+  CO2asBicarb = 0.23 * PCO2 * Math.pow(10, pH - 6.1);
+  PhosphateEffect = Phosphate * (0.309 * pH - 0.469);
+  SIDe = CO2asBicarb + AlbuminEffect + PhosphateEffect;
+  SIG = SIDa - SIDe;
 
-  let NaEffect = 0.3 * (Na - 140);
-  let ClEffect = 102 - (Cl * 140) / Na;
-  let NaClEffect = Na - Cl - 38;
-  let LactateEffect = -1 * Lactate;
+  NaEffect = 0.3 * (Na - 140);
+  ClEffect = 102 - (Cl * 140) / Na;
+  NaClEffect = Na - Cl - 38;
+  LactateEffect = -1 * Lactate;
   // let CaEffect = -0.25 * (CaTot - 2.25);
   // let MgEffect = -0.15 * (Mg - 1);
   // CO2  as bicarb =0.23 * pCO2 * 10^(pH - 6.1)
@@ -139,7 +154,7 @@ function updateResult() {
   let DeltaRatio = DeltaGap / (24 - HCO3);
 
   let OsmCalc = 2 * (Na + K) + Ur + Gluc;
-  let OsmGap = MeasuredOsm - OsmCalc;
+  OsmGap = MeasuredOsm - OsmCalc;
 
   document.getElementById("AnionGapBox").innerText =
     Number(AnionGap).toFixed(1);
@@ -237,8 +252,7 @@ function updateResult() {
     SIDaBoxColour = "lightblue";
   }
   document.getElementById("SIDaBox").style.background = SIDaBoxColour;
-
-  console.log(SIDaBoxColour);
+  //console.log(SIDaBoxColour);
 
   drawGamblegram();
   updateInterpretation();
@@ -272,53 +286,117 @@ function updateInterpretation() {
     console.log(pH);
   }
 
-  let acidFlag = false;
-  let aemia;
-  // if (pH < 7.35) {
-  //   acidFlag=true;
-  //   aemia = "acidaemia";
-  //   if (sBEHbPt < -2) {
-  //     aemia += " with metabolic acidosis";
-  //   } else if (sBEHbPt > 2) {
-  //     aemia += " with metabolic compensation";
-  //   }
-  // } else if (pH > 7.45) {
-  //   aemia = "alkalaemia";
-  //   if (sBEHbPt < -2) {
-  //     aemia += " with metabolic compensation";
-  //   } else if (sBEHbPt > 2) {
-  //     aemia += " with metabolic alkalosis";
-  //   }
-  // } else {
-  //   aemia = "normal pH";
-  // }
+  const abgPatterns = [
+    {
+      pH: "low",
+      CO2: "high",
+      HCO3: "normal",
+      meaning: "Uncompensated respiratory acidosis",
+      metabolicAcidosis: true,
+    },
+    {
+      pH: "low",
+      CO2: "normal",
+      HCO3: "low",
+      meaning: "Uncompensated metabolic acidosis",
+      metabolicAcidosis: true,
+    },
+    {
+      pH: "low",
+      CO2: "high",
+      HCO3: "high",
+      meaning: "Partially compensated respiratory acidosis",
+    },
+    {
+      pH: "low",
+      CO2: "low",
+      HCO3: "low",
+      meaning: "Partially compensated metabolic acidosis",
+    },
+    {
+      pH: "normal",
+      CO2: "high",
+      HCO3: "high",
+      meaning: "Fully compensated respiratory acidosis",
+    },
+    {
+      pH: "normal",
+      CO2: "low",
+      HCO3: "low",
+      meaning: "Fully compensated respiratory alkalosis",
+    },
+    {
+      pH: "normal",
+      CO2: "normal",
+      HCO3: "normal",
+      meaning: "Normal ABG",
+    },
+  ];
 
-  if (pH < 7.35) {
-    console.log("acidaemia");
-    acidFlag = true;
-    aemia = "acidaemia";
-    if (sBEHbPt < -2 && PCO2 < 4.0) {
-      aemia += " due to a metabolic acidosis with respiratory compensation";
-    }
-
-    if (sBEHbPt < -2 && PCO2 > 4.0 && PCO2 <= 6.0) {
-      aemia += " due to a pure metabolic acidosis";
-    }
-
-    if (sBEHbPt < -2 && PCO2 > 6.0) {
-      aemia += " due to a mixed metabolic and respiratory acidosis";
-    }
-
-    if (sBEHbPt > 2 && PCO2 > 6.0) {
-      aemia += " due to a respiratory acidosis with metabolic compensation";
-    }
-    if (sBEHbPt > -2 && sBEHb50 < 2 && PCO2 > 6.0) {
-      aemia += " due to a respiratory acidosis without metabolic compensation";
-    }
+  if (debugging) {
+    console.log(abgPatterns);
   }
 
-  let interpretationText = `This represents ${aemia}. `;
+  let pHdisturbance, PCO2disturbance, HCO3disturbance;
+  let metabolicAcidosis = false;
 
+  if (pH < 7.35) {
+    pHdisturbance = "low";
+  } else if (pH > 7.45) {
+    pHdisturbance = "high";
+  } else {
+    pHdisturbance = "normal";
+  }
+
+  if (PCO2 < 4.0) {
+    PCO2disturbance = "low";
+  } else if (PCO2 > 6.0) {
+    PCO2disturbance = "high";
+  } else {
+    PCO2disturbance = "normal";
+  }
+
+  if (HCO3 < 22) {
+    HCO3disturbance = "low";
+  } else if (HCO3 > 26) {
+    HCO3disturbance = "high";
+  } else {
+    HCO3disturbance = "normal";
+  }
+
+  let interpretationText =
+    abgPatterns.find(
+      (row) =>
+        row.pH === pHdisturbance &&
+        row.CO2 === PCO2disturbance &&
+        row.HCO3 === HCO3disturbance,
+    )?.meaning || "Pattern not found — consider mixed disorder";
+
+  interpretationText +=
+    "\npH: " +
+    pHdisturbance +
+    ", CO2: " +
+    PCO2disturbance +
+    ", HCO3: " +
+    HCO3disturbance;
+
+  console.log("int txt: " + interpretationText);
+
+  if (interpretationText.includes("metabolic acidosis")) {
+    console.log("Metabolic acidosis detected. Aniong gap is " + AnionGap);
+    if (AnionGap > 16) {
+      console.log("well AG is high ");
+      interpretationText += "\nHigh anion gap metabolic acidosis.";
+      if (OsmGap >= 16) {
+        interpretationText +=
+          " Raised osmolar gap — consider toxic alcohol ingestion.";
+      }
+    } else if (AnionGap <= 16) {
+      console.log("well AG is LOW!! ");
+      interpretationText += "\nNormal anion gap.";
+    }
+  }
+  console.log(interpretationText);
   document.getElementById("interpretationBox").innerText = interpretationText;
 }
 
@@ -367,4 +445,9 @@ function plotSiggardAndersson(pH, HCO3) {
   noFill();
   stroke(255, 0, 0);
   ellipse(x, y, 10, 10);
+}
+
+//returns colour for cell depending on value;
+function setBackgroundColour(parameter, value) {
+  return null;
 }
