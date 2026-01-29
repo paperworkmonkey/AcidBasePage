@@ -1,0 +1,55 @@
+Most recent ABG: ***hrs
+	pH	7.436
+	PaCO2	4.71 kPa
+	PaO2	8.81 kPa
+	Na	150 mmol/L
+	K	3.5 mmol/L
+	Cl-	116 mmol/L
+	Bic	24.1 mmol/L
+	BE	-0.4 mmol/L
+	Gluc	3.6 mmol/L
+	Lac	1.2 mmol/L
+	SaO2	94.4 %
+	Hb(tot)	72 g/L
+	iCa++	1.26 mmol/L
+	Alb	18 g/L
+	PO4	1.38 mmol/L
+	Mg	0.97 mmol/L
+
+
+
+	pH	7.469
+	PaCO2	4.89 kPa
+	PaO2	11.6 kPa
+	Na	134 mmol/L
+	K	3.8 mmol/L
+	Cl-	106 mmol/L
+	Bic	26.9 mmol/L
+	BE	2.8 mmol/L
+	Gluc	4.8 mmol/L
+	Lac	0.9 mmol/L
+	SaO2	98.0 %
+	Hb(tot)	90 g/L
+	iCa++	0.99 mmol/L
+	Alb	24 g/L; 24 g/L
+	PO4	0.68 mmol/L
+	Mg	0.81 mmol/L
+
+
+	pH	7.428
+	PaCO2	4.35 kPa
+	PaO2	10.3 kPa
+	Na	144 mmol/L
+	K	3.0 mmol/L
+	Cl-	115 mmol/L
+	Bic	22.4 mmol/L
+	BE	-2.4 mmol/L
+	Gluc	10.2 mmol/L
+	Lac	0.8 mmol/L
+	SaO2	96.8 %
+	Hb(tot)	84 g/L
+	iCa++	1.25 mmol/L
+	Alb	28 g/L; 28 g/L
+	PO4	0.82 mmol/L
+	Mg	0.76 mmol/L
+

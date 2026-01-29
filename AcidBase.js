@@ -43,7 +43,13 @@ function preload() {
 function setup() {
   createCanvas(400, 400);
   updateResult();
-  console.log(ranges);
+  debugg(ranges);
+
+  document.getElementById("myForm").addEventListener("submit", function (e) {
+    e.preventDefault(); // stop page reload
+    let text = document.getElementById("ABGinput").value;
+    parseABG(text);
+  });
 }
 
 function updateResult() {
@@ -262,7 +268,7 @@ function updateResult() {
 function drawGamblegram() {
   // Placeholder function for drawing the Gamblegram
   if (debugging) {
-    console.log("Drawing Gamblegram...");
+    debugg("Drawing Gamblegram...");
   }
 
   // function draw() {
@@ -281,10 +287,8 @@ function drawGamblegram() {
 }
 
 function updateInterpretation() {
-  if (debugging) {
-    console.log("Updating Interpretation...");
-    console.log(pH);
-  }
+  debugg("Updating Interpretation...");
+  debugg(pH);
 
   const abgPatterns = [
     {
@@ -380,23 +384,33 @@ function updateInterpretation() {
     ", HCO3: " +
     HCO3disturbance;
 
-  console.log("int txt: " + interpretationText);
+  debugg("int txt: " + interpretationText);
 
   if (interpretationText.includes("metabolic acidosis")) {
-    console.log("Metabolic acidosis detected. Aniong gap is " + AnionGap);
+    debugg("Metabolic acidosis detected. Aniong gap is " + AnionGap);
     if (AnionGap > 16) {
-      console.log("well AG is high ");
+      debugg("well AG is high ");
       interpretationText += "\nHigh anion gap metabolic acidosis.";
       if (OsmGap >= 16) {
         interpretationText +=
           " Raised osmolar gap — consider toxic alcohol ingestion.";
       }
     } else if (AnionGap <= 16) {
-      console.log("well AG is LOW!! ");
+      debugg("well AG is LOW!! ");
       interpretationText += "\nNormal anion gap.";
     }
   }
-  console.log(interpretationText);
+
+  if (NaClEffect < -4) {
+    interpretationText += "\nHyperchaloraemic acidosis"
+  }
+
+  if (AlbuminEffect < 10) {
+    interpretationText += "\nHypoalbuminaemic alkalosis"
+  }
+
+
+  debugg(interpretationText);
   document.getElementById("interpretationBox").innerText = interpretationText;
 }
 
@@ -447,7 +461,87 @@ function plotSiggardAndersson(pH, HCO3) {
   ellipse(x, y, 10, 10);
 }
 
+function clearText() {
+  document.getElementById("ABGinput").value = "";
+}
+
+function submitForm(e) {
+  e.preventDefault();
+  const text = document.getElementById("ABGinput").value;
+  debugg("text length: " + text.length);
+  if (text.length > 20) {
+    parseABG(text);
+    debugg("read anyway!!!!")
+  }
+}
+
+function parseABG(ABG) {
+
+  function extractValue(label) {
+    const regex = new RegExp(`^\\s*${label}\\s+([\\d.]+)`, "m");
+    const match = ABG.match(regex);
+    return match ? Number(match[1]) : null;
+  }
+
+  pH = parseFloat(extractValue("pH") || 0);
+  document.getElementById("pHValue").value = pH;
+
+  PCO2 = parseFloat(extractValue("PaCO2") || 0);
+  document.getElementById("PCO2Value").value = PCO2;
+
+  HCO3 = parseFloat(extractValue("Bic") || 0);
+  document.getElementById("HCO3Value").value = HCO3;
+
+  Na = parseFloat(extractValue("Na") || 0);
+  document.getElementById("NaValue").value = Na;
+
+  K = parseFloat(extractValue("K") || 0);
+  document.getElementById("KValue").value = K;
+
+  Cl = parseFloat(extractValue("Cl-") || 0);
+  document.getElementById("ClValue").value = Cl;
+
+  Lactate = parseFloat(extractValue("Lac") || 0);
+  document.getElementById("LactateValue").value = Lactate;
+
+  Hb = parseFloat(extractValue("Hb\\(tot\\)") || 0);
+  document.getElementById("HbValue").value = Hb;
+
+  Gluc = parseFloat(extractValue("Gluc") || 0);
+  document.getElementById("GlucoseValue").value = Gluc;
+
+  Albumin = parseFloat(extractValue("Alb") || 0);
+  document.getElementById("AlbuminValue").value = Albumin;
+
+  PO4 = parseFloat(extractValue("PO4") || 0);
+  document.getElementById("PhosphateValue").value = PO4;
+
+  Mg = parseFloat(extractValue("Mg") || 0);
+  document.getElementById("MgValue").value = Mg;
+
+  // CaTot = parseFloat(CaTotValue.value || 0);
+  // let CaTotValue = document.getElementById("CaTotValue");
+  // let MeasuredOsmValue = document.getElementById("MeasOsmValue");
+  // let UreaValue = document.getElementById("UreaValue");
+  // MeasuredOsm = parseFloat(MeasuredOsmValue.value || 0);
+  // Ur = parseFloat(UreaValue.value || 0);
+
+  // const paO2_kPa = extractValue("PaO2");
+  // const baseExcess_mmolL = extractValue("BE");
+  // const saO2_percent = extractValue("SaO2");
+  // const ionisedCalcium_mmolL = extractValue("iCa\\+\\+");
+  // albumin = parseFloat(AlbuminValue.value || 0);
+
+  updateResult();
+}
+
 //returns colour for cell depending on value;
 function setBackgroundColour(parameter, value) {
   return null;
+}
+
+function debugg(text) {
+  if (debugging) {
+    console.log(text);
+  }
 }

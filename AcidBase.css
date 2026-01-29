@@ -376,6 +376,18 @@ canvas {
   grid-area: 16 / 5 / 17 / 6;
 }
 
+.abg-form {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.button-column {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
 .interpretation {
   /* grid-area: 17 / 1 / 18 / 6; */
   margin: 10px;
