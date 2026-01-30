@@ -42,6 +42,12 @@ body {
   z-index: 1000;
 }
 
+.firstRow {
+  display: flex;
+  align-items: center; /* vertical alignment */
+  gap: 12px; /* space between title and link */
+}
+
 .brand {
   display: flex;
   align-items: center;
