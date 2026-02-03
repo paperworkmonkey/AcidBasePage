@@ -140,28 +140,52 @@ function updateResult() {
   SIDe = CO2asBicarb + AlbuminEffect + PhosphateEffect;
   SIG = SIDa - SIDe;
 
-  NaEffect = 0.3 * (Na - 140);
-  ClEffect = 102 - (Cl * 140) / Na;
-  NaClEffect = Na - Cl - 38;
+  if (!Na) {
+    NaEffect = NaN;
+  } else {
+    NaEffect = 0.3 * (Na - 140);
+  }
+
+  if (!Cl) {
+    ClEffect = NaN;
+  } else {
+    ClEffect = 102 - (Cl * 140) / Na;
+  }
+
+  if (!NaEffect || !ClEffect) {
+    NaClEffect = NaN;
+  } else {
+    NaClEffect = Na - Cl - 38;
+  }
+
   LactateEffect = -1 * Lactate;
   // let CaEffect = -0.25 * (CaTot - 2.25);
   // let MgEffect = -0.15 * (Mg - 1);
   // CO2  as bicarb =0.23 * pCO2 * 10^(pH - 6.1)
   //phosphate (B12*(0.309*B9-0.469))
 
-  sBEHb50 =
-    (CO2asBicarb - 24.4 + (2.3 * (50 / 10) + 7.7) * (pH - 7.4)) *
-    (1 - (0.023 * 50) / 10);
-  sBEHbPt =
-    (CO2asBicarb - 24.4 + (2.3 * (Hb / 10) + 7.7) * (pH - 7.4)) *
-    (1 - (0.023 * Hb) / 10);
+  if (CO2asBicarb == 0 || pH == 0) {
+    sBEHb50 = NaN;
+    sBEHbPt = NaN;
+  } else {
+    sBEHb50 =
+      (CO2asBicarb - 24.4 + (2.3 * (50 / 10) + 7.7) * (pH - 7.4)) *
+      (1 - (0.023 * 50) / 10);
+    sBEHbPt =
+      (CO2asBicarb - 24.4 + (2.3 * (Hb / 10) + 7.7) * (pH - 7.4)) *
+      (1 - (0.023 * Hb) / 10);
+  }
 
   let DeltaGap = AnionGap - 12 - (HCO3 - 24);
 
   DeltaRatio = DeltaGap / (24 - HCO3);
 
   let OsmCalc = 2 * (Na + K) + Ur + Gluc;
-  OsmGap = MeasuredOsm - OsmCalc;
+  if (MeasuredOsm > 100) {
+    OsmGap = MeasuredOsm - OsmCalc;
+  } else {
+    OsmGap = "";
+  }
 
   document.getElementById("AnionGapBox").innerText =
     Number(AnionGap).toFixed(1);
@@ -182,7 +206,30 @@ function updateResult() {
     Number(CO2asBicarb).toFixed(1);
   document.getElementById("sBEHb50Box").innerText = Number(sBEHb50).toFixed(1);
   document.getElementById("sBEHbPtBox").innerText = Number(sBEHbPt).toFixed(1);
-  document.getElementById("OsmGapBox").innerText = Number(OsmGap).toFixed(1);
+
+  if (MeasuredOsm < OsmCalc) {
+    document.getElementById("OsmGapBox").innerText = "";
+  } else {
+    document.getElementById("OsmGapBox").innerText = Number(OsmGap).toFixed(1);
+  }
+  //avoid displaying BE if absent values
+  if (!sBEHb50) {
+    document.getElementById("sBEHb50Box").innerText = "";
+  } else {
+    document.getElementById("sBEHb50Box").innerText =
+      Number(sBEHb50).toFixed(1);
+  }
+  if (!sBEHbPt) {
+    document.getElementById("sBEHbPtBox").innerText = "";
+  } else {
+    document.getElementById("sBEHbPtBox").innerText =
+      Number(sBEHb50).toFixed(1);
+  }
+
+  //avoid displaying NaCl
+  if (!NaClEffect) {
+  } else {
+  }
 
   //avoid displaying delta values if HCO3 is normal
   if (HCO3 > 20 && HCO3 <= 28) {
@@ -395,7 +442,8 @@ function updateInterpretation() {
 
       //Delta ratios
       if (DeltaRatio >= 2) {
-        interpretationText += "\nDelta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate."
+        interpretationText +=
+          "\nDelta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.";
       }
       // else if (DeltaRatio > 1 && DeltaRatio < 2) {
       //   interpretationText += "\nDelta ratio indeterminate."
@@ -406,7 +454,8 @@ function updateInterpretation() {
 
       //osmolar gap
       if (OsmGap >= 16) {
-        interpretationText += " Raised osmolar gap — consider toxic alcohol ingestion.";
+        interpretationText +=
+          " Raised osmolar gap — consider toxic alcohol ingestion.";
       }
     } else if (AnionGap <= 16) {
       debugg("well AG is LOW!! ");
@@ -414,13 +463,12 @@ function updateInterpretation() {
     }
   }
 
-
   if (NaClEffect <= -4) {
-    interpretationText += "\nHyperchaloraemic acidosis"
+    interpretationText += "\nHyperchaloraemic acidosis";
   }
 
   if (AlbuminEffect < 10) {
-    interpretationText += "\nHypoalbuminaemic alkalosis"
+    interpretationText += "\nHypoalbuminaemic alkalosis";
   }
 
   debugg(interpretationText);
@@ -484,12 +532,11 @@ function submitForm(e) {
   debugg("text length: " + text.length);
   if (text.length > 20) {
     parseABG(text);
-    debugg("read anyway!!!!")
+    debugg("read anyway!!!!");
   }
 }
 
 function parseABG(ABG) {
-
   function extractValue(label) {
     const regex = new RegExp(`^\\s*${label}\\s+([\\d.]+)`, "m");
     const match = ABG.match(regex);
@@ -499,7 +546,7 @@ function parseABG(ABG) {
   pH = parseFloat(extractValue("pH") || 0);
   document.getElementById("pHValue").value = pH;
 
-  PCO2 = parseFloat(extractValue("PaCO2") || 0);
+  PCO2 = parseFloat(extractValue("PCO2") || 0);
   document.getElementById("PCO2Value").value = PCO2;
 
   HCO3 = parseFloat(extractValue("Bic") || 0);
@@ -546,6 +593,10 @@ function parseABG(ABG) {
   // albumin = parseFloat(AlbuminValue.value || 0);
 
   updateResult();
+}
+
+function saveABG() {
+  console.log("Stored an ABG!");
 }
 
 //returns colour for cell depending on value;

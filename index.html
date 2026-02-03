@@ -252,7 +252,7 @@
         <input
           type="number"
           id="MeasOsmValue"
-          value="290"
+          value="310"
           min="100"
           max="400.00"
           step="1"
@@ -391,16 +391,17 @@
       <div class="button-column">
         <button type="submit">Read ABG</button>
         <button type="button" onclick="clearText()">Clear</button>
+        <button type="button" onclick="saveABG()">Save ABG</button>
       </div>
     </form>
 
-    <script>
+    <!-- <script>
       document.getElementById("myForm").addEventListener("clear", function (e) {
         e.preventDefault(); // stop page reload
         document.getElementById("myText").value = 0;
         console.log(value);
       });
-    </script>
+    </script> -->
     <script src="AcidBase.js"></script>
   </body>
 </html>
