@@ -409,7 +409,7 @@ function updateInterpretation() {
 
     {
       //done
-      pH: "low_normal",
+      pH: "low normal",
       CO2: "high",
       HCO3: "high",
       meaning: "Compensated respiratory acidosis",
@@ -417,7 +417,7 @@ function updateInterpretation() {
     },
     {
       //done
-      pH: "high_normal",
+      pH: "high normal",
       CO2: "high",
       HCO3: "high",
       meaning: "Compensated metabolic alkalosis",
@@ -426,7 +426,7 @@ function updateInterpretation() {
 
     {
       //done
-      pH: "low_normal",
+      pH: "low normal",
       CO2: "low",
       HCO3: "low",
       meaning: "Compensated metabolic acidosis",
@@ -434,7 +434,7 @@ function updateInterpretation() {
     },
     {
       //done
-      pH: "high_normal",
+      pH: "high normal",
       CO2: "low",
       HCO3: "low",
       meaning: "Compensated respiratory alkalosis",
@@ -451,6 +451,7 @@ function updateInterpretation() {
     },
 
     {
+      //done
       pH: "high",
       CO2: "low",
       HCO3: "high",
@@ -459,20 +460,23 @@ function updateInterpretation() {
     },
 
     {
-      pH: "low_normal",
+      //done
+      pH: "low normal",
       CO2: "normal",
       HCO3: "normal",
       meaning: "Normal ABG",
       metabolicAcidosis: false,
     },
     {
-      pH: "high_normal",
+      //done
+      pH: "high normal",
       CO2: "normal",
       HCO3: "normal",
       meaning: "Normal ABG",
       metabolicAcidosis: false,
     },
     {
+      //done
       pH: "normal",
       CO2: "normal",
       HCO3: "normal",
@@ -493,9 +497,9 @@ function updateInterpretation() {
   } else if (pH > 7.45) {
     pHdisturbance = "high";
   } else if (pH < 7.4) {
-    pHdisturbance = "low_normal";
+    pHdisturbance = "low normal";
   } else {
-    pHdisturbance = "high_normal";
+    pHdisturbance = "high normal";
   }
 
   if (PCO2 < 4.0) {
@@ -523,20 +527,26 @@ function updateInterpretation() {
     )?.meaning || "Pattern not found — consider mixed disorder";
 
   interpretationText +=
-    "\npH: " +
+    "\n(pH " +
     pHdisturbance +
-    ", CO2: " +
+    ", PCO2 " +
     PCO2disturbance +
-    ", HCO3: " +
-    HCO3disturbance;
+    ", bicarb " +
+    HCO3disturbance +
+    ")";
 
   debugg("int txt: " + interpretationText);
 
   if (interpretationText.includes("metabolic acidosis")) {
     debugg("Metabolic acidosis detected. Aniong gap is " + AnionGap);
+
+    if (LactateEffect < -2) {
+      interpretationText += "\nLactic acidosis.";
+    }
+
     if (AnionGap > 16) {
       debugg("well AG is high ");
-      interpretationText += "\nHigh anion gap metabolic acidosis.";
+      interpretationText += "\nHAGMA";
 
       //Delta ratios
       if (DeltaRatio >= 2) {
