@@ -134,9 +134,9 @@ function updateResult() {
   let NormalAG = 0.2 * albumin + 1.5 * Phosphate + Lactate; // in mmol/L
   SIDa = Na + K + CaTot + Mg - Cl - Lactate;
 
-  AlbuminEffect = (0.123 * pH - 0.631) * albumin;
+  AlbuminEffect = (0.123 * pH - 0.631) * (42 - albumin);
   CO2asBicarb = 0.23 * PCO2 * Math.pow(10, pH - 6.1);
-  PhosphateEffect = Phosphate * (0.309 * pH - 0.469);
+  PhosphateEffect = (1.1 - Phosphate) * (0.309 * pH - 0.469);
   SIDe = CO2asBicarb + AlbuminEffect + PhosphateEffect;
   SIG = SIDa - SIDe;
 
@@ -158,7 +158,7 @@ function updateResult() {
     NaClEffect = Na - Cl - 38;
   }
 
-  LactateEffect = -1 * Lactate;
+  LactateEffect = 1.3 - Lactate;
   // let CaEffect = -0.25 * (CaTot - 2.25);
   // let MgEffect = -0.15 * (Mg - 1);
   // CO2  as bicarb =0.23 * pCO2 * 10^(pH - 6.1)
@@ -194,8 +194,6 @@ function updateResult() {
   document.getElementById("SIDaBox").innerText = Number(SIDa).toFixed(1);
   document.getElementById("SIDeBox").innerText = Number(SIDe).toFixed(1);
   document.getElementById("SIGBox").innerText = Number(SIG).toFixed(1);
-  document.getElementById("AlbuminEffectBox").innerText =
-    Number(AlbuminEffect).toFixed(1);
   document.getElementById("NaClEffectBox").innerText =
     Number(NaClEffect).toFixed(1);
   document.getElementById("LactateEffectBox").innerText =
@@ -206,6 +204,8 @@ function updateResult() {
     Number(CO2asBicarb).toFixed(1);
   document.getElementById("sBEHb50Box").innerText = Number(sBEHb50).toFixed(1);
   document.getElementById("sBEHbPtBox").innerText = Number(sBEHbPt).toFixed(1);
+  document.getElementById("AlbuminEffectBox").innerText =
+    Number(AlbuminEffect).toFixed(1);
 
   if (MeasuredOsm < OsmCalc) {
     document.getElementById("OsmGapBox").innerText = "";
@@ -253,6 +253,27 @@ function updateResult() {
   } else {
     document.getElementById("AnionGapBox").style.background = "lightblue";
   }
+
+  let albuminEffectColour;
+  if (AlbuminEffect < -2.0) {
+    albuminEffectColour =
+      "rgb(255," +
+      map(AlbuminEffectEffect, -2.1, -15, 230, 0) +
+      "," +
+      map(AlbuminEffect, -2.1, -15, 230, 0) +
+      ")";
+  } else if (AlbuminEffect >= 2.0) {
+    albuminEffectColour =
+      "rgb(" +
+      map(AlbuminEffect, 2.1, 30, 230, 0) +
+      "," +
+      map(AlbuminEffect, 2.1, 30, 236, 60) +
+      ",255)";
+  } else {
+    albuminEffectColour = "lightblue";
+  }
+  document.getElementById("AlbuminEffectBox").style.background =
+    albuminEffectColour;
 
   if (LactateEffect < -2.0) {
     let LactateEffectColour =
@@ -575,7 +596,7 @@ function updateInterpretation() {
     interpretationText += "\nHyperchaloraemic acidosis";
   }
 
-  if (AlbuminEffect < 10) {
+  if (AlbuminEffect > 2) {
     interpretationText += "\nHypoalbuminaemic alkalosis";
   }
 
