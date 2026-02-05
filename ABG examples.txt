@@ -1,7 +1,7 @@
 Most recent ABG: ***hrs
 	pH	7.436
-	PaCO2	4.71 kPa
-	PaO2	8.81 kPa
+	PCO2	4.71 kPa
+	PO2	8.81 kPa
 	Na	150 mmol/L
 	K	3.5 mmol/L
 	Cl-	116 mmol/L
@@ -19,8 +19,8 @@ Most recent ABG: ***hrs
 
 
 	pH	7.469
-	PaCO2	4.89 kPa
-	PaO2	11.6 kPa
+	PCO2	4.89 kPa
+	PO2	11.6 kPa
 	Na	134 mmol/L
 	K	3.8 mmol/L
 	Cl-	106 mmol/L
@@ -37,8 +37,8 @@ Most recent ABG: ***hrs
 
 
 	pH	7.428
-	PaCO2	4.35 kPa
-	PaO2	10.3 kPa
+	PCO2	4.35 kPa
+	PO2	10.3 kPa
 	Na	144 mmol/L
 	K	3.0 mmol/L
 	Cl-	115 mmol/L

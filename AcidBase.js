@@ -340,48 +340,144 @@ function updateInterpretation() {
 
   const abgPatterns = [
     {
+      //done
       pH: "low",
       CO2: "high",
       HCO3: "normal",
       meaning: "Uncompensated respiratory acidosis",
-      metabolicAcidosis: true,
+      metabolicAcidosis: false,
     },
     {
+      //done
       pH: "low",
       CO2: "normal",
       HCO3: "low",
       meaning: "Uncompensated metabolic acidosis",
       metabolicAcidosis: true,
     },
+
     {
+      //done
+      pH: "high",
+      CO2: "low",
+      HCO3: "normal",
+      meaning: "Uncompensated respiratory alkalosis",
+      metabolicAcidosis: false,
+    },
+    {
+      //done
+      pH: "high",
+      CO2: "normal",
+      HCO3: "high",
+      meaning: "Uncompensated metabolic alkalosis",
+      metabolicAcidosis: false,
+    },
+
+    {
+      //done
       pH: "low",
       CO2: "high",
       HCO3: "high",
       meaning: "Partially compensated respiratory acidosis",
+      metabolicAcidosis: false,
     },
     {
+      //done
       pH: "low",
       CO2: "low",
       HCO3: "low",
       meaning: "Partially compensated metabolic acidosis",
+      metabolicAcidosis: true,
     },
+
     {
-      pH: "normal",
-      CO2: "high",
-      HCO3: "high",
-      meaning: "Fully compensated respiratory acidosis",
-    },
-    {
-      pH: "normal",
+      //done
+      pH: "high",
       CO2: "low",
       HCO3: "low",
-      meaning: "Fully compensated respiratory alkalosis",
+      meaning: "Partially compensated respiratory alkalosis",
+      metabolicAcidosis: false,
+    },
+    {
+      //done
+      pH: "high",
+      CO2: "high",
+      HCO3: "high",
+      meaning: "Partially compensated metabolic alkalosis",
+      metabolicAcidosis: false,
+    },
+
+    {
+      //done
+      pH: "low_normal",
+      CO2: "high",
+      HCO3: "high",
+      meaning: "Compensated respiratory acidosis",
+      metabolicAcidosis: false,
+    },
+    {
+      //done
+      pH: "high_normal",
+      CO2: "high",
+      HCO3: "high",
+      meaning: "Compensated metabolic alkalosis",
+      metabolicAcidosis: false,
+    },
+
+    {
+      //done
+      pH: "low_normal",
+      CO2: "low",
+      HCO3: "low",
+      meaning: "Compensated metabolic acidosis",
+      metabolicAcidosis: true,
+    },
+    {
+      //done
+      pH: "high_normal",
+      CO2: "low",
+      HCO3: "low",
+      meaning: "Compensated respiratory alkalosis",
+      metabolicAcidosis: false,
+    },
+
+    {
+      //done
+      pH: "low",
+      CO2: "high",
+      HCO3: "low",
+      meaning: "Mixed metabolic and respiratory acidosis",
+      metabolicAcidosis: true,
+    },
+
+    {
+      pH: "high",
+      CO2: "low",
+      HCO3: "high",
+      meaning: "Mixed metabolic and respiratory alkalosis",
+      metabolicAcidosis: true,
+    },
+
+    {
+      pH: "low_normal",
+      CO2: "normal",
+      HCO3: "normal",
+      meaning: "Normal ABG",
+      metabolicAcidosis: false,
+    },
+    {
+      pH: "high_normal",
+      CO2: "normal",
+      HCO3: "normal",
+      meaning: "Normal ABG",
+      metabolicAcidosis: false,
     },
     {
       pH: "normal",
       CO2: "normal",
       HCO3: "normal",
       meaning: "Normal ABG",
+      metabolicAcidosis: false,
     },
   ];
 
@@ -396,8 +492,10 @@ function updateInterpretation() {
     pHdisturbance = "low";
   } else if (pH > 7.45) {
     pHdisturbance = "high";
+  } else if (pH < 7.4) {
+    pHdisturbance = "low_normal";
   } else {
-    pHdisturbance = "normal";
+    pHdisturbance = "high_normal";
   }
 
   if (PCO2 < 4.0) {
