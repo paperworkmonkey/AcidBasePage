@@ -390,8 +390,11 @@
       <!-- <input type="textarea" id="ABGinput" oninput="parseABG()" -->
       <div class="button-column">
         <button type="submit">Read ABG</button>
-        <button type="button" onclick="clearText()">Clear</button>
+        <button type="button" onclick="clearText()">Reset</button>
+      </div>
+      <div class="button-column">
         <button type="button" onclick="saveABG()">Save ABG</button>
+        <button type="button" onclick="copyInterpretation()">Copy</button>
       </div>
     </form>
 
@@ -402,6 +405,7 @@
         console.log(value);
       });
     </script> -->
+    <script src="ABG.js"></script>
     <script src="AcidBase.js"></script>
   </body>
 </html>
