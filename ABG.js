@@ -44,6 +44,7 @@ class ABGclass {
     this.ClEffect;
     this.NaClEffect;
     this.PhosphateEffect;
+    this.interpretation;
   }
 
   calculate() {
@@ -99,7 +100,6 @@ class ABGclass {
 
     //delta gaps and ratios
     let DeltaGap = this.AnionGap - 12 - (this.HCO3 - 24);
-
     this.DeltaRatio = this.DeltaGap / (24 - this.HCO3);
 
     //osm gap
@@ -465,7 +465,7 @@ class ABGclass {
       HCO3disturbance = "normal";
     }
 
-    let interpretationText =
+    this.interpretationText =
       abgPatterns.find(
         (row) =>
           row.pH === pHdisturbance &&
@@ -473,7 +473,7 @@ class ABGclass {
           row.HCO3 === HCO3disturbance,
       )?.meaning || "Pattern not found — consider mixed disorder";
 
-    interpretationText +=
+    this.interpretationText +=
       "\n(pH " +
       pHdisturbance +
       ", PCO2 " +
@@ -482,52 +482,53 @@ class ABGclass {
       HCO3disturbance +
       ")";
 
-    debugg("int txt: " + interpretationText);
+    debugg("int txt: " + this.interpretationText);
 
-    if (interpretationText.includes("metabolic acidosis")) {
+    if (this.interpretationText.includes("metabolic acidosis")) {
       debugg("Metabolic acidosis detected. Aniong gap is " + this.AnionGap);
 
       if (this.LactateEffect < -2) {
-        interpretationText += "\nLactic acidosis.";
+        this.interpretationText += "\nLactic acidosis.";
       }
 
       if (this.AnionGap > 16) {
         debugg("well AG is high ");
-        interpretationText += "\nHAGMA";
+        this.interpretationText += "\nHAGMA";
 
         //Delta ratios
         if (this.DeltaRatio >= 2) {
-          interpretationText +=
+          this.interpretationText +=
             "\nDelta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.";
         }
         // else if (DeltaRatio > 1 && DeltaRatio < 2) {
-        //   interpretationText += "\nDelta ratio indeterminate."
+        //   this.interpretationText += "\nDelta ratio indeterminate."
         // }
         if (this.DeltaRatio < 1) {
-          interpretationText += "\nPure NAGMA";
+          this.interpretationText += "\nPure NAGMA";
         }
 
         //osmolar gap
         if (this.OsmGap >= 16) {
-          interpretationText +=
+          this.interpretationText +=
             " Raised osmolar gap — consider toxic alcohol ingestion.";
         }
       } else if (this.AnionGap <= 16) {
         debugg("well AG is LOW!! ");
-        interpretationText += "\nNormal anion gap.";
+        this.interpretationText += "\nNormal anion gap.";
       }
     }
 
     if (this.NaClEffect <= -4) {
-      interpretationText += "\nHyperchloraemic acidosis";
+      this.interpretationText += "\nHyperchloraemic acidosis";
     }
 
     if (this.AlbuminEffect > 2) {
-      interpretationText += "\nHypoalbuminaemic alkalosis";
+      this.interpretationText += "\nHypoalbuminaemic alkalosis";
     }
 
-    debugg(interpretationText);
-    document.getElementById("interpretationBox").innerText = interpretationText;
+    debugg(this.interpretationText);
+    document.getElementById("interpretationBox").innerText =
+      this.interpretationText;
   }
 
   plotSiggardAndersson() {
@@ -573,7 +574,7 @@ class ABGclass {
     ellipse(x, y, 10, 10);
   }
 
-  drawGanblegram() {
+  drawGamblegram() {
     //placeholder function for Gamblegram
     if (debugging) {
       debugg("Drawing Gamblegram...");

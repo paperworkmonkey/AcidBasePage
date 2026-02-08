@@ -1,5 +1,5 @@
 let img;
-let debugging = true;
+let debugging = false;
 let ranges;
 let ABGexamples;
 let ABG;
@@ -115,59 +115,16 @@ function updateResult() {
     return;
   }
 
-  // if (!Na) {
-  //   NaEffect = NaN;
-  // } else {
-  //   NaEffect = 0.3 * (Na - 140);
-  // }
-
-  // if (!Cl) {
-  //   ClEffect = NaN;
-  // } else {
-  //   ClEffect = 102 - (Cl * 140) / Na;
-  // }
-
-  // if (!NaEffect || !ClEffect) {
-  //   NaClEffect = NaN;
-  // } else {
-  //   NaClEffect = Na - Cl - 38;
-  // }
-
-  // LactateEffect = 1.3 - Lactate;
-
   // let CaEffect = -0.25 * (CaTot - 2.25);
   // let MgEffect = -0.15 * (Mg - 1);
   // CO2  as bicarb =0.23 * pCO2 * 10^(pH - 6.1)
   //phosphate (B12*(0.309*B9-0.469))
 
-  // if (CO2asBicarb == 0 || pH == 0) {
-  //   sBEHb50 = NaN;
-  //   sBEHbPt = NaN;
-  // } else {
-  //   sBEHb50 =
-  //     (CO2asBicarb - 24.4 + (2.3 * (50 / 10) + 7.7) * (pH - 7.4)) *
-  //     (1 - (0.023 * 50) / 10);
-  //   sBEHbPt =
-  //     (CO2asBicarb - 24.4 + (2.3 * (Hb / 10) + 7.7) * (pH - 7.4)) *
-  //     (1 - (0.023 * Hb) / 10);
-  // }
-
-  // let DeltaGap = AnionGap - 12 - (HCO3 - 24);
-
-  // DeltaRatio = DeltaGap / (24 - HCO3);
-
-  // let OsmCalc = 2 * (Na + K) + Ur + Gluc;
-  // if (MeasuredOsm > 100) {
-  //   OsmGap = MeasuredOsm - OsmCalc;
-  // } else {
-  //   OsmGap = "";
-  // }
-
   ABG.calculate();
   ABG.display();
   ABG.updateInterpretation();
-  ABG.drawGamblegram();
   ABG.plotSiggardAndersson();
+  ABG.drawGamblegram();
 }
 
 function submitForm(e) {
@@ -188,56 +145,59 @@ function parseABG(inputABG) {
   }
 
   ABG.pH = parseFloat(extractValue("pH") || 0);
-  document.getElementById("pHValue").value = pH;
+  document.getElementById("pHValue").value = ABG.pH;
 
   ABG.PCO2 = parseFloat(extractValue("PCO2") || 0);
-  document.getElementById("PCO2Value").value = PCO2;
+  document.getElementById("PCO2Value").value = ABG.PCO2;
 
   ABG.HCO3 = parseFloat(extractValue("Bic") || 0);
-  document.getElementById("HCO3Value").value = HCO3;
+  document.getElementById("HCO3Value").value = ABG.HCO3;
 
   ABG.Na = parseFloat(extractValue("Na") || 0);
-  document.getElementById("NaValue").value = Na;
+  document.getElementById("NaValue").value = ABG.Na;
 
   ABG.K = parseFloat(extractValue("K") || 0);
-  document.getElementById("KValue").value = K;
+  document.getElementById("KValue").value = ABG.K;
 
-  ABG.Cl = parseFloat(extractValue("Cl-") || 0);
-  document.getElementById("ClValue").value = Cl;
+  ABG.Cl = parseFloat(extractValue("Cl") || 0);
+  document.getElementById("ClValue").value = ABG.Cl;
 
   ABG.lactate = parseFloat(extractValue("Lac") || 0);
-  document.getElementById("LactateValue").value = Lactate;
+  document.getElementById("LactateValue").value = ABG.lactate;
 
   ABG.Hb = parseFloat(extractValue("Hb\\(tot\\)") || 0);
-  document.getElementById("HbValue").value = Hb;
+  document.getElementById("HbValue").value = ABG.Hb;
 
   ABG.Gluc = parseFloat(extractValue("Gluc") || 0);
-  document.getElementById("GlucoseValue").value = Gluc;
+  document.getElementById("GlucoseValue").value = ABG.Gluc;
 
   ABG.albumin = parseFloat(extractValue("Alb") || 0);
-  document.getElementById("AlbuminValue").value = Albumin;
+  document.getElementById("AlbuminValue").value = ABG.albumin;
 
   ABG.PO4 = parseFloat(extractValue("PO4") || 0);
-  document.getElementById("PhosphateValue").value = PO4;
+  document.getElementById("PhosphateValue").value = ABG.PO4;
 
   ABG.Mg = parseFloat(extractValue("Mg") || 0);
-  document.getElementById("MgValue").value = Mg;
+  document.getElementById("MgValue").value = ABG.Mg;
 
   ABG.Ur = parseFloat(extractValue("Ur") || 0);
-  document.getElementById("UreaValue").value = Mg;
+  document.getElementById("UreaValue").value = ABG.Mg;
 
   ABG.MeasuredOsm = parseFloat(extractValue("Measured Osm") || 0);
-  document.getElementById("MeasOsmValue").value = Mg;
+  document.getElementById("MeasOsmValue").value = ABG.Mg;
 
   // CaTot = parseFloat(CaTotValue.value || 0);
   // let CaTotValue = document.getElementById("CaTotValue");
-
   // const paO2_kPa = extractValue("PaO2");
   // const baseExcess_mmolL = extractValue("BE");
   // const saO2_percent = extractValue("SaO2");
   // const ionisedCalcium_mmolL = extractValue("iCa\\+\\+");
 
-  ABG.updateResult();
+  ABG.calculate();
+  ABG.display();
+  ABG.updateInterpretation();
+  ABG.plotSiggardAndersson();
+  ABG.drawGamblegram();
 }
 
 function saveABG() {
