@@ -18,7 +18,7 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(400, 400);
+  createCanvas(800, 800);
   debugg(ranges);
 
   ABG = new ABGclass();
@@ -181,7 +181,7 @@ function parseABG(inputABG) {
   document.getElementById("MgValue").value = ABG.Mg;
 
   ABG.Ur = parseFloat(extractValue("Ur") || 0);
-  document.getElementById("UreaValue").value = ABG.Mg;
+  document.getElementById("UreaValue").value = ABG.Ur;
 
   ABG.MeasuredOsm = parseFloat(extractValue("Measured Osm") || 0);
   document.getElementById("MeasOsmValue").value = ABG.Mg;

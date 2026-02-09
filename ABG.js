@@ -532,7 +532,7 @@ class ABGclass {
   }
 
   plotSiggardAndersson() {
-    debugg("Plottign SA nomogram...");
+    debugg("Plotting SA nomogram...");
     debugg(img);
     debugg(canvas);
 
