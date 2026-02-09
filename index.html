@@ -76,7 +76,7 @@
         <input
           type="number"
           id="NaValue"
-          value="140"
+          value="138"
           min="90"
           max="180"
           oninput="updateResult()"
@@ -105,7 +105,7 @@
         <input
           type="number"
           id="ClValue"
-          value="100"
+          value="102"
           min="50"
           max="150"
           oninput="updateResult()"
@@ -273,43 +273,37 @@
       <div class="divR3b" id="CorrAnionGapBox"></div>
       <div class="divR3c">12-20 mmol/L</div>
 
-      <div class="divR4a" style="background-color: palegreen">
-        Albumin Effect:
-      </div>
-      <div class="divR4b" id="AlbuminEffectBox"></div>
-      <div class="divR4c">10-12</div>
+      <div class="divR4a"><b>SIDe:</b></div>
+      <div class="divR4b" id="SIDeBox"></div>
+      <div class="divR4c">36-40 mmol/L</div>
 
-      <div class="divR5a" style="background-color: palegreen">
-        CO2 as bicarb:
-      </div>
-      <div class="divR5b" id="CO2asBicarbBox"></div>
-      <div class="divR5c">22-26 mmol/L</div>
+      <div class="divR5a"><b>SIDa:</b></div>
+      <div class="divR5b" id="SIDaBox"></div>
+      <div class="divR5c">40-44 mmol/L</div>
 
-      <div class="divR6a" style="background-color: palegreen">
-        Phosphate Effect:
-      </div>
-      <div class="divR6b" id="PhosphateEffectBox"></div>
-      <div class="divR6c">???</div>
+      <div class="divR6a"><b>SIG:</b></div>
+      <div class="divR6b" id="SIGBox"></div>
+      <div class="divR6c">0 to 6 mmol/L</div>
 
-      <div class="divR7a" style="background-color: green">SIDe:</div>
-      <div class="divR7b" id="SIDeBox"></div>
-      <div class="divR7c">38-42 mmol/L</div>
+      <div class="divR7a">CO2 as bicarb:</div>
+      <div class="divR7b" id="CO2asBicarbBox"></div>
+      <div class="divR7c">22-26 mmol/L</div>
 
-      <div class="divR8a">SIDa:</div>
-      <div class="divR8b" id="SIDaBox"></div>
-      <div class="divR8c">40-44 mmol/L</div>
+      <div class="divR8a">Albumin Effect:</div>
+      <div class="divR8b" id="AlbuminEffectBox"></div>
+      <div class="divR8c">-2 to +2</div>
 
-      <div class="divR9a">SIG:</div>
-      <div class="divR9b" id="SIGBox"></div>
-      <div class="divR9c">-2 to +2 mmol/L</div>
+      <div class="divR9a">NaCl Effect:</div>
+      <div class="divR9b" id="NaClEffectBox"></div>
+      <div class="divR9c">???</div>
 
-      <div class="divR10a">NaCl Effect:</div>
-      <div class="divR10b" id="NaClEffectBox"></div>
-      <div class="divR10c">???</div>
+      <div class="divR10a">Lactate Effect:</div>
+      <div class="divR10b" id="LactateEffectBox"></div>
+      <div class="divR10c">0-2 mmol/L</div>
 
-      <div class="divR11a">Lactate Effect:</div>
-      <div class="divR11b" id="LactateEffectBox"></div>
-      <div class="divR11c">0-2 mmol/L</div>
+      <div class="divR11a">Phosphate Effect:</div>
+      <div class="divR11b" id="PhosphateEffectBox"></div>
+      <div class="divR11c">???</div>
 
       <div class="divR12a">sBE (Hb 50):</div>
       <div class="divR12b" id="sBEHb50Box"></div>
@@ -390,8 +384,11 @@
       <!-- <input type="textarea" id="ABGinput" oninput="parseABG()" -->
       <div class="button-column">
         <button type="submit">Read ABG</button>
-        <button type="button" onclick="clearText()">Clear</button>
+        <button type="button" onclick="clearText()">Reset</button>
+      </div>
+      <div class="button-column">
         <button type="button" onclick="saveABG()">Save ABG</button>
+        <button type="button" onclick="copyInterpretation()">Copy</button>
       </div>
     </form>
 
@@ -402,6 +399,7 @@
         console.log(value);
       });
     </script> -->
+    <script src="ABG.js"></script>
     <script src="AcidBase.js"></script>
   </body>
 </html>
