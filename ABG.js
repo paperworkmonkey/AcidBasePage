@@ -7,6 +7,7 @@ class ABGclass {
     Cl,
     HCO3,
     CaTot,
+    iCa,
     Mg,
     phosphate,
     lactate,
@@ -23,6 +24,7 @@ class ABGclass {
     this.Cl = Cl;
     this.HCO3 = HCO3;
     this.CaTot = CaTot;
+    this.iCa = iCa;
     this.Mg = Mg;
     this.phosphate = phosphate;
     this.lactate = lactate;
@@ -44,24 +46,48 @@ class ABGclass {
     this.ClEffect;
     this.NaClEffect;
     this.PhosphateEffect;
+    this.DeltaGap;
+    this.DeltaRatio;
     this.interpretation;
   }
 
   calculate() {
+    //ionised calcium from total calcium:
+    if (!this.iCa || (this.iCa < 0.4 && this.CaTot > 0.5)) {
+      this.iCa = 0.25 * (0.9 + 2.2 * this.CaTot) - 0.03 * this.albumin;
+    }
+    console.log(`iCa ${this.iCa}`);
+
+    //
     this.AnionGap = this.Na + this.K - (this.Cl + this.HCO3);
     this.CorrAnionGap =
       this.Na - (this.Cl + this.HCO3) + 0.25 * (this.albumin - 40);
     this.NormalAG = 0.2 * this.albumin + 1.5 * this.phosphate + this.lactate; // in mmol/L
     this.SIDa =
-      this.Na + this.K + this.CaTot + this.Mg - this.Cl - this.lactate;
+      this.Na +
+      this.K +
+      this.CaTot +
+      2 * this.Mg +
+      2 * this.iCa -
+      this.Cl -
+      this.lactate;
 
     this.AlbuminEffect = (0.123 * this.pH - 0.631) * (42 - this.albumin);
     this.CO2asBicarb = 0.23 * this.PCO2 * Math.pow(10, this.pH - 6.1);
     this.PhosphateEffect = (1.1 - this.phosphate) * (0.309 * this.pH - 0.469);
-    this.SIDe = this.CO2asBicarb + this.AlbuminEffect + this.PhosphateEffect;
+
+    this.SIDe =
+      2.46e-8 * (this.PCO2 / Math.pow(10, -this.pH)) +
+      this.albumin * (0.123 * this.pH - 0.631) +
+      this.phosphate * (0.309 * this.pH - 0.469);
+
+    // this.SIDe = this.CO2asBicarb + this.AlbuminEffect + this.PhosphateEffect;
     this.SIG = this.SIDa - this.SIDe;
 
     //NaCl effect
+    // console.log(`Na ${this.Na}`);
+    // console.log(`Cl ${this.Cl}`);
+
     if (!this.Na) {
       this.NaEffect = NaN;
     } else {
@@ -74,7 +100,10 @@ class ABGclass {
       this.ClEffect = 102 - (this.Cl * 140) / this.Na;
     }
 
-    if (!this.NaEffect || !this.ClEffect) {
+    // console.log(`Na effect: ${this.NaEffect}`);
+    // console.log(`Cl effect: ${this.ClEffect}`);
+
+    if (this.NaEffect == NaN || this.ClEffect == NaN) {
       this.NaClEffect = NaN;
     } else {
       this.NaClEffect = this.Na - this.Cl - 38;
@@ -99,7 +128,7 @@ class ABGclass {
     }
 
     //delta gaps and ratios
-    let DeltaGap = this.AnionGap - 12 - (this.HCO3 - 24);
+    this.DeltaGap = this.AnionGap - 12 - (this.HCO3 - 24);
     this.DeltaRatio = this.DeltaGap / (24 - this.HCO3);
 
     //osm gap
@@ -174,7 +203,8 @@ class ABGclass {
     }
 
     //avoid displaying delta values if HCO3 is normal
-    if (this.HCO3 > 20 && this.HCO3 <= 28) {
+    if (this.HCO3 >= 20 && this.HCO3 <= 28) {
+      console.log("no d gap or ration because of logic");
       document.getElementById("DeltaGapBox").innerText = "";
       document.getElementById("DeltaRatioBox").innerText = "";
     } else {
