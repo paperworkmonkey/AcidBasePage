@@ -3,7 +3,7 @@
 	PO2	8.81 kPa
 	Na	150 mmol/L
 	K	3.5 mmol/L
-	Cl-	116 mmol/L
+	Cl	116 mmol/L
 	Bic	24.1 mmol/L
 	BE	-0.4 mmol/L
 	Gluc	3.6 mmol/L
@@ -20,7 +20,7 @@
 	PO2	11.6 kPa
 	Na	134 mmol/L
 	K	3.8 mmol/L
-	Cl-	106 mmol/L
+	Cl	106 mmol/L
 	Bic	26.9 mmol/L
 	BE	2.8 mmol/L
 	Gluc	4.8 mmol/L
@@ -37,7 +37,7 @@
 	PO2	10.3 kPa
 	Na	144 mmol/L
 	K	3.0 mmol/L
-	Cl-	115 mmol/L
+	Cl	115 mmol/L
 	Bic	22.4 mmol/L
 	BE	-2.4 mmol/L
 	Gluc	10.2 mmol/L
