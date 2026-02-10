@@ -7,14 +7,14 @@ let ABG;
 //let img1, img2;
 
 function preload() {
-  img = loadImage("Acid-base_nomogram.svg.png");
   //let img1 = loadImage(
   //   "https://icuonline.co.uk/AcidBase/Acid-base_nomogram.svg.png",
   // );
   //let img2 = loadImage("/Acid-base_nomogram.svg.png");
 
+  img = loadImage("Acid-base_nomogram.svg.png");
   ranges = loadTable("ranges.csv", "csv", "header");
-  ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
+  ABGexamples = loadTable("/ABGexamplesTable.csv", "csv", "header");
 }
 
 function setup() {
@@ -36,6 +36,7 @@ function setup() {
 }
 
 function updateResult() {
+  console.log("ABG: " + ABG);
   // Get references to the input elements by their IDs
   // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
   let pHValue = document.getElementById("pHValue");
