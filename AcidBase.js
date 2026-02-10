@@ -3,15 +3,9 @@ let debugging = false;
 let ranges;
 let ABGexamples;
 let ABG;
-
-//let img1, img2;
+let selectedABG = null;
 
 function preload() {
-  //let img1 = loadImage(
-  //   "https://icuonline.co.uk/AcidBase/Acid-base_nomogram.svg.png",
-  // );
-  //let img2 = loadImage("/Acid-base_nomogram.svg.png");
-
   img = loadImage("Acid-base_nomogram.svg.png");
   ranges = loadTable("ranges.csv", "csv", "header");
   ABGexamples = loadTable("/ABGexamplesTable.csv", "csv", "header");
@@ -36,7 +30,6 @@ function setup() {
 }
 
 function updateResult() {
-  console.log("ABG: " + ABG);
   // Get references to the input elements by their IDs
   // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
   let pHValue = document.getElementById("pHValue");
@@ -199,16 +192,12 @@ function parseABG(inputABG) {
   ABG.updateInterpretation();
   ABG.plotSiggardAndersson();
   ABG.drawGamblegram();
+  listABGtable();
 }
 
 function saveABG() {
   debugg("Stored an ABG");
 }
-
-//returns colour for cell depending on value;
-// function setBackgroundColour(parameter, value) {
-//   return null;
-// }
 
 function debugg(text) {
   if (debugging) {
@@ -216,12 +205,190 @@ function debugg(text) {
   }
 }
 
-function clearText() {
-  //document.getElementById("ABGinput").value = "";
+function resetABG() {
+  console.log("resetting ABG");
+  document.getElementById("ABGinput").innerText = "";
 }
 
 function copyInterpretation() {
   var copyText = document.getElementById("interpretationBox").innerText;
   navigator.clipboard.writeText(copyText);
   debugg("Feed copied.");
+}
+
+function listABGtable() {
+  const old = document.getElementById("exampleTable");
+  if (old) old.remove();
+
+  const container = document.createElement("div");
+  container.id = "exampleTable";
+
+  // ---- CSS (only once) ----
+  if (!document.getElementById("abgTableStyles")) {
+    const style = document.createElement("style");
+    style.id = "abgTableStyles";
+    style.textContent = `
+      #exampleTable{
+        margin: 16px;
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+
+      .abg-table {
+        border-collapse: collapse;
+        width: 100%;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+        font-size: 14px;
+      }
+
+      .abg-table th, .abg-table td {
+        padding: 10px 12px;
+        border-bottom: 1px solid #e5e7eb;
+        white-space: nowrap;
+      }
+
+      .abg-table thead th {
+        position: sticky;
+        top: 0;
+        background: #111827;
+        color: white;
+        text-align: left;
+        font-weight: 700;
+      }
+
+      .abg-table tbody th {
+        background: #f3f4f6;
+        font-weight: 700;
+        color: #111827;
+        position: sticky;
+        left: 0;
+        z-index: 1;
+      }
+
+      .abg-table tbody tr:nth-child(even) td {
+        background: #f9fafb;
+      }
+
+      .abg-col-header {
+        cursor: pointer;
+      }
+
+      .abg-col-header:hover {
+        background: #4f46e5;
+      }
+
+      .abg-col-header.selected {
+        background: #3730a3 !important;
+      }
+
+      .abg-selected-label {
+        margin: 10px 0 14px;
+        font-size: 14px;
+        font-weight: 600;
+        color: #111827;
+      }
+
+      /* Horizontal scroll if needed */
+      .abg-scroll {
+        overflow-x: auto;
+        border-radius: 12px;
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+  // ---- label ----
+  const label = document.createElement("div");
+  label.className = "abg-selected-label";
+  label.textContent = "Selected ABG: (none)";
+  container.appendChild(label);
+
+  // ---- data ----
+  const rows = ABGexamples.getRows();
+  const columns = ABGexamples.columns;
+
+  // ABG IDs become the column headers
+  const abgIDs = rows.map((r) => r.getString("ABG"));
+
+  // Parameters become the left-side labels
+  const parameters = columns.filter((c) => c !== "ABG");
+
+  // ---- build table ----
+  const scrollWrap = document.createElement("div");
+  scrollWrap.className = "abg-scroll";
+
+  const htmlTable = document.createElement("table");
+  htmlTable.className = "abg-table";
+
+  // ---- THEAD ----
+  const thead = document.createElement("thead");
+  const headRow = document.createElement("tr");
+
+  // top-left corner cell
+  const corner = document.createElement("th");
+  corner.textContent = "Parameter";
+  headRow.appendChild(corner);
+
+  // ABG column headers
+  abgIDs.forEach((abgId, abgIndex) => {
+    const th = document.createElement("th");
+    th.textContent = abgId;
+    th.className = "abg-col-header";
+
+    th.addEventListener("click", () => {
+      // highlight selected header
+      htmlTable
+        .querySelectorAll(".abg-col-header")
+        .forEach((h) => h.classList.remove("selected"));
+      th.classList.add("selected");
+
+      selectedABG = abgId;
+      label.textContent = `Selected ABG: ${selectedABG}`;
+
+      // copy to textarea
+      const inputBox = document.getElementById("abgInputBox");
+      if (!inputBox) return;
+
+      // Make it "one parameter per line"
+      const lines = [];
+      parameters.forEach((param) => {
+        lines.push(`${param}: ${rows[abgIndex].getString(param)}`);
+      });
+
+      inputBox.value = lines.join("\n");
+    });
+
+    headRow.appendChild(th);
+  });
+
+  thead.appendChild(headRow);
+  htmlTable.appendChild(thead);
+
+  // ---- TBODY ----
+  const tbody = document.createElement("tbody");
+
+  parameters.forEach((param) => {
+    const tr = document.createElement("tr");
+
+    // parameter name in first column
+    const th = document.createElement("th");
+    th.textContent = param;
+    tr.appendChild(th);
+
+    // each ABG value across
+    rows.forEach((r) => {
+      const td = document.createElement("td");
+      td.textContent = r.getString(param);
+      tr.appendChild(td);
+    });
+
+    tbody.appendChild(tr);
+  });
+
+  htmlTable.appendChild(tbody);
+
+  scrollWrap.appendChild(htmlTable);
+  container.appendChild(scrollWrap);
+  document.body.appendChild(container);
 }

@@ -56,7 +56,7 @@ class ABGclass {
     if (!this.iCa || (this.iCa < 0.4 && this.CaTot > 0.5)) {
       this.iCa = 0.25 * (0.9 + 2.2 * this.CaTot) - 0.03 * this.albumin;
     }
-    console.log(`iCa ${this.iCa}`);
+    debugg(`iCa ${this.iCa}`);
 
     //
     this.AnionGap = this.Na + this.K - (this.Cl + this.HCO3);
@@ -204,7 +204,7 @@ class ABGclass {
 
     //avoid displaying delta values if HCO3 is normal
     if (this.HCO3 >= 20 && this.HCO3 <= 28) {
-      console.log("no d gap or ration because of logic");
+      debugg("no d gap or ration because of logic");
       document.getElementById("DeltaGapBox").innerText = "";
       document.getElementById("DeltaRatioBox").innerText = "";
     } else {
@@ -566,19 +566,12 @@ class ABGclass {
     debugg(img);
     debugg(canvas);
 
-    // let img;
-
-    // if (!img1) {
-    //   console.error("Image not loaded yet.");
-    //   img = img2;
-    // } else {
-    //   img = img1;
-    // }
     clear();
+
     // Draw border and image
-    stroke(0); // Black color
-    strokeWeight(2); // Border thickness
-    noFill(); // Do not fill the rectangle
+    stroke(0);
+    strokeWeight(2);
+    noFill();
     rect(0, 0, width, height);
     image(img, 0, 0, width, height);
 

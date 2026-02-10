@@ -369,7 +369,7 @@
     <p
       class="interpretation"
       id="interpretationBox"
-      style="font-weight: normal; font-size: 1em; margin-top: 20px"
+      style="font-weight: normal; font-size: 1em; margin-top: 10px"
     >
       Interpretation.
     </p>
@@ -380,11 +380,17 @@
       style="display: flex; gap: 10px"
       onsubmit="submitForm(event)"
     >
-      <textarea id="ABGinput" name="myText" rows="20" cols="30"></textarea>
-      <!-- <input type="textarea" id="ABGinput" oninput="parseABG()" -->
+      <textarea
+        id="ABGinput"
+        name="myText"
+        rows="20"
+        cols="30"
+        style="margin: 20px"
+      ></textarea>
+
       <div class="button-column">
         <button type="submit">Read ABG</button>
-        <button type="button" onclick="clearText()">Reset</button>
+        <button type="button" onclick="resetABG()">Reset</button>
       </div>
       <div class="button-column">
         <button type="button" onclick="saveABG()">Save ABG</button>
@@ -395,10 +401,11 @@
     <!-- <script>
       document.getElementById("myForm").addEventListener("clear", function (e) {
         e.preventDefault(); // stop page reload
-        document.getElementById("myText").value = 0;
-        console.log(value);
+        // document.getElementById("myText").value = 0;
+        // console.log(value);
       });
     </script> -->
+
     <script src="ABG.js"></script>
     <script src="AcidBase.js"></script>
   </body>
