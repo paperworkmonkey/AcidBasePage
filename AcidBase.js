@@ -8,7 +8,7 @@ let selectedABG = null;
 function preload() {
   img = loadImage("Acid-base_nomogram.svg.png");
   ranges = loadTable("ranges.csv", "csv", "header");
-  ABGexamples = loadTable("/ABGexamplesTable.csv", "csv", "header");
+  ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
 }
 
 function setup() {
@@ -217,6 +217,7 @@ function copyInterpretation() {
 }
 
 function listABGtable() {
+  console.log("drawing ABG example table");
   const old = document.getElementById("exampleTable");
   if (old) old.remove();
 
