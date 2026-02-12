@@ -559,6 +559,8 @@ class ABGclass {
     debugg(this.interpretationText);
     document.getElementById("interpretationBox").innerText =
       this.interpretationText;
+
+    this.plotSiggardAndersson();
   }
 
   plotSiggardAndersson() {
