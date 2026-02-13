@@ -25,7 +25,7 @@ let GlucoseValue;
 
 function preload() {
   img = loadImage("Acid-base_nomogram.svg.png");
-  ranges = loadTable("ranges.csv", "csv", "header");
+  //ranges = loadTable("ranges.csv", "csv", "header");
   ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
 }
 
