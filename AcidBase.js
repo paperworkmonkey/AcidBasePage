@@ -5,6 +5,24 @@ let ABGexamples;
 let ABG;
 let selectedABG = null;
 
+let pHValue;
+let PCO2Value;
+let HCO3Value;
+let NaValue;
+let KValue;
+let ClValue;
+let CaTotValue;
+let iCaValue;
+let BE;
+let MgValue;
+let AlbuminValue;
+let PhosphateValue;
+let LactateValue;
+let HbValue;
+let MeasuredOsmValue;
+let UreaValue;
+let GlucoseValue;
+
 function preload() {
   img = loadImage("Acid-base_nomogram.svg.png");
   ranges = loadTable("ranges.csv", "csv", "header");
@@ -12,42 +30,52 @@ function preload() {
 }
 
 function setup() {
+
+  //if this is running in a localhost browser add a 'save as example' button
+  //console.log("Location port", location.port)
+  if (location.port == 5500) {
+    const ExButton = document.createElement("button")
+    ExButton.innerText = "Save as example";
+    ExButton.id = "ExampleSaveButton";
+    ExButton.onclick = saveAsExample;
+    document.getElementById("button-column88").appendChild(ExButton);
+  }
+
   createCanvas(800, 800);
   debugg(ranges);
 
   ABG = new ABGclass();
   debugg(ABG);
-
-  console.table(ABGexamples);
-  // let rows = ABGexamples.getRows().map((row) => row.obj);
-  // debugg(rows);
+  //console.table(ABGexamples);
 
   document.getElementById("myForm").addEventListener("submit", function (e) {
     e.preventDefault(); // stop page reload
     let text = document.getElementById("ABGinput").value;
     parseABG(text);
   });
+
+  // Get references to the input elements by their IDs
+  // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
+  pHValue = document.getElementById("pHValue");
+  PCO2Value = document.getElementById("PCO2Value");
+  HCO3Value = document.getElementById("HCO3Value");
+  NaValue = document.getElementById("NaValue");
+  KValue = document.getElementById("KValue");
+  ClValue = document.getElementById("ClValue");
+  CaTotValue = document.getElementById("CaTotValue");
+  iCaValue = document.getElementById("iCaValue");
+  MgValue = document.getElementById("MgValue");
+  AlbuminValue = document.getElementById("AlbuminValue");
+  PhosphateValue = document.getElementById("PhosphateValue");
+  LactateValue = document.getElementById("LactateValue");
+  HbValue = document.getElementById("HbValue");
+  MeasuredOsmValue = document.getElementById("MeasOsmValue");
+  UreaValue = document.getElementById("UreaValue");
+  GlucoseValue = document.getElementById("GlucoseValue");
+  console.log("pHValue: ", pHValue);
 }
 
 function updateResult() {
-  // Get references to the input elements by their IDs
-  // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
-  let pHValue = document.getElementById("pHValue");
-  let PCO2Value = document.getElementById("PCO2Value");
-  let HCO3Value = document.getElementById("HCO3Value");
-  let NaValue = document.getElementById("NaValue");
-  let KValue = document.getElementById("KValue");
-  let ClValue = document.getElementById("ClValue");
-  let CaTotValue = document.getElementById("CaTotValue");
-  let MgValue = document.getElementById("MgValue");
-  let AlbuminValue = document.getElementById("AlbuminValue");
-  let PhosphateValue = document.getElementById("PhosphateValue");
-  let LactateValue = document.getElementById("LactateValue");
-  let HbValue = document.getElementById("HbValue");
-  let MeasuredOsmValue = document.getElementById("MeasOsmValue");
-  let UreaValue = document.getElementById("UreaValue");
-  let GlucoseValue = document.getElementById("GlucoseValue");
-
   ABG.pH = parseFloat(document.getElementById("pHValue").value || 0);
   ABG.PCO2 = parseFloat(document.getElementById("PCO2Value").value || 0);
   ABG.HCO3 = parseFloat(document.getElementById("HCO3Value").value || 0);
@@ -55,6 +83,7 @@ function updateResult() {
   ABG.K = parseFloat(document.getElementById("KValue").value || 0);
   ABG.Cl = parseFloat(document.getElementById("ClValue").value || 0);
   ABG.CaTot = parseFloat(document.getElementById("CaTotValue").value || 0);
+  ABG.iCa = parseFloat(document.getElementById("iCaValue").value || 0);
   ABG.Mg = parseFloat(document.getElementById("MgValue").value || 0);
   ABG.albumin = parseFloat(document.getElementById("AlbuminValue").value || 0);
   ABG.phosphate = parseFloat(
@@ -94,6 +123,7 @@ function updateResult() {
     !NaValue ||
     !KValue ||
     !ClValue ||
+    !iCaValue ||
     !CaTotValue ||
     !MgValue ||
     !AlbuminValue ||
@@ -121,13 +151,15 @@ function updateResult() {
   ABG.drawGamblegram();
 }
 
-function submitForm(e) {
-  e.preventDefault();
+function readABG() {
   const text = document.getElementById("ABGinput").value;
   debugg("text length: " + text.length);
   if (text.length > 20) {
     parseABG(text);
     debugg("read anyway!!!!");
+  }
+  else {
+    console.log("Not enough in input box");
   }
 }
 
@@ -139,75 +171,87 @@ function parseABG(inputABG) {
   }
 
   ABG.pH = parseFloat(extractValue("pH") || 0);
-  document.getElementById("pHValue").value = ABG.pH;
-
   ABG.PCO2 = parseFloat(extractValue("PCO2") || 0);
-  document.getElementById("PCO2Value").value = ABG.PCO2;
-
   ABG.HCO3 = parseFloat(extractValue("Bic") || 0);
-  document.getElementById("HCO3Value").value = ABG.HCO3;
-
   ABG.Na = parseFloat(extractValue("Na") || 0);
-  document.getElementById("NaValue").value = ABG.Na;
-
   ABG.K = parseFloat(extractValue("K") || 0);
-  document.getElementById("KValue").value = ABG.K;
-
   ABG.Cl = parseFloat(extractValue("Cl") || 0);
-  document.getElementById("ClValue").value = ABG.Cl;
-
   ABG.lactate = parseFloat(extractValue("Lac") || 0);
-  document.getElementById("LactateValue").value = ABG.lactate;
-
   ABG.Hb = parseFloat(extractValue("Hb\\(tot\\)") || 0);
-  document.getElementById("HbValue").value = ABG.Hb;
-
   ABG.Gluc = parseFloat(extractValue("Gluc") || 0);
-  document.getElementById("GlucoseValue").value = ABG.Gluc;
-
   ABG.albumin = parseFloat(extractValue("Alb") || 0);
-  document.getElementById("AlbuminValue").value = ABG.albumin;
-
-  ABG.PO4 = parseFloat(extractValue("PO4") || 0);
-  document.getElementById("PhosphateValue").value = ABG.PO4;
-
+  ABG.phosphate = parseFloat(extractValue("PO4") || 0);
   ABG.Mg = parseFloat(extractValue("Mg") || 0);
-  document.getElementById("MgValue").value = ABG.Mg;
-
   ABG.Ur = parseFloat(extractValue("Ur") || 0);
-  document.getElementById("UreaValue").value = ABG.Ur;
-
   ABG.MeasuredOsm = parseFloat(extractValue("Measured Osm") || 0);
-  document.getElementById("MeasOsmValue").value = ABG.Mg;
-
-  // CaTot = parseFloat(CaTotValue.value || 0);
-  // let CaTotValue = document.getElementById("CaTotValue");
-  // const paO2_kPa = extractValue("PaO2");
+  ABG.iCa = parseFloat(extractValue("iCa") || 0);
+  ABG.CaTot = parseFloat(extractValue("CaTotValue.value") || 0);
   // const baseExcess_mmolL = extractValue("BE");
-  // const saO2_percent = extractValue("SaO2");
   // const ionisedCalcium_mmolL = extractValue("iCa\\+\\+");
 
+  ABG.loadABGintoInputFields();
   ABG.calculate();
   ABG.display();
   ABG.updateInterpretation();
   ABG.plotSiggardAndersson();
   ABG.drawGamblegram();
-  listABGtable();
 }
 
 function saveABG() {
-  debugg("Stored an ABG");
-}
+  if (location.port = 5500) {
+    //add line to ABGexamplesTable.csv
 
-function debugg(text) {
-  if (debugging) {
-    console.log(text);
+  }
+  else {
+    debugg("Stored an ABG");
+    localStorage.setItem("abg", JSON.stringify(ABG.toJSON()));
+    console.log(localStorage.getItem("abg"));
   }
 }
 
+function loadABG() {
+  let raw = localStorage.getItem("abg");
+  if (!raw) return null;
+
+  let data = JSON.parse(raw);
+  ABG = ABGclass.fromJSON(data);
+  console.log("loaded ABG: ", ABG);
+  ABG.loadABGintoInputFields();
+  ABG.calculate();
+  ABG.display();
+  ABG.updateInterpretation();
+  ABG.plotSiggardAndersson();
+  ABG.drawGamblegram();
+}
+
+
 function resetABG() {
   console.log("resetting ABG");
-  document.getElementById("ABGinput").innerText = "";
+
+  ABG.pH = 7.40;
+  ABG.PCO2 = 5.00;
+  ABG.HCO3 = 25;
+  ABG.Na = 138;
+  ABG.K = 4.0;
+  ABG.Cl = 102;
+  ABG.CaTot = 2.4;
+  ABG.iCa = 0.9
+  ABG.Mg = 1.0;
+  ABG.albumin = 40;
+  ABG.phosphate = 1.0;
+  ABG.lactate = 1.0;
+  ABG.Hb = 120;
+  ABG.MeasuredOsm = 310;
+  ABG.Ur = 6;
+  ABG.Gluc = 6;
+  //document.getElementById("ABGinput").value = "";
+
+  ABG.loadABGintoInputFields();
+  ABG.calculate();
+  ABG.display();
+  ABG.updateInterpretation();
+  ABG.plotSiggardAndersson();
+  ABG.drawGamblegram();
 }
 
 function copyInterpretation() {
@@ -217,7 +261,7 @@ function copyInterpretation() {
 }
 
 function listABGtable() {
-  console.log("drawing ABG example table");
+  debugg("drawing ABG example table");
   const old = document.getElementById("exampleTable");
   if (old) old.remove();
 
@@ -247,6 +291,7 @@ function listABGtable() {
         padding: 10px 12px;
         border-bottom: 1px solid #e5e7eb;
         white-space: nowrap;
+        text-align: left;
       }
 
       .abg-table thead th {
@@ -392,4 +437,15 @@ function listABGtable() {
   scrollWrap.appendChild(htmlTable);
   container.appendChild(scrollWrap);
   document.body.appendChild(container);
+}
+
+function debugg(text) {
+  if (debugging) {
+    console.log(text);
+  }
+}
+
+function saveAsExample() {
+  //let myAlertText = toString(ABG.pH);
+  alert(`Past this into ABG:\n${ABG.pH},${ABG.PCO2},${ABG.PO2},${ABG.Na},${ABG.K},${ABG.Cl},${ABG.HCO3}, BE,${ABG.Gluc}, ${ABG.lactate}, ${ABG.SaO2}, ${ABG.Hb},${ABG.iCa},${ABG.albumin}, ${ABG.phosphate}, ${ABG.Mg}, Context`);
 }

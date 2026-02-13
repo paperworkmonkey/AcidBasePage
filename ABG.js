@@ -501,22 +501,16 @@ class ABGclass {
           row.pH === pHdisturbance &&
           row.CO2 === PCO2disturbance &&
           row.HCO3 === HCO3disturbance,
-      )?.meaning || "Pattern not found — consider mixed disorder";
+      )?.meaning || "Pattern not recognised — consider mixed disorder";
 
-    this.interpretationText +=
-      "\n(pH " +
-      pHdisturbance +
-      ", PCO2 " +
-      PCO2disturbance +
-      ", bicarb " +
-      HCO3disturbance +
-      ")";
+    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})`
 
     debugg("int txt: " + this.interpretationText);
 
-    if (this.interpretationText.includes("metabolic acidosis")) {
+    //if (this.interpretationText.includes("metabolic acidosis")) {
+    if ((this.interpretationText.includes("metabolic acidosis")) || (this.pH < 7.35 && this.PCO2 < 6.0) || (this.HCO3 < 24)) {
       debugg("Metabolic acidosis detected. Aniong gap is " + this.AnionGap);
-
+      this.interpretationText += "\nMetabolic acidosis present"
       if (this.LactateEffect < -2) {
         this.interpretationText += "\nLactic acidosis.";
       }
@@ -528,7 +522,7 @@ class ABGclass {
         //Delta ratios
         if (this.DeltaRatio >= 2) {
           this.interpretationText +=
-            "\nDelta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.";
+            "\nDelta Ratio > 2 suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.";
         }
         // else if (DeltaRatio > 1 && DeltaRatio < 2) {
         //   this.interpretationText += "\nDelta ratio indeterminate."
@@ -561,6 +555,7 @@ class ABGclass {
       this.interpretationText;
 
     this.plotSiggardAndersson();
+    listABGtable();
   }
 
   plotSiggardAndersson() {
@@ -604,5 +599,71 @@ class ABGclass {
     if (debugging) {
       debugg("Drawing Gamblegram...");
     }
+  }
+
+  // instance -> plain object
+  toJSON() {
+    return {
+      pH: this.pH,
+      PCO2: this.PCO2,
+      Na: this.Na,
+      K: this.K,
+      Cl: this.Cl,
+      HCO3: this.HCO3,
+      CaTot: this.CaTot,
+      iCa: this.iCa,
+      Mg: this.Mg,
+      phosphate: this.phosphate,
+      lactate: this.lactate,
+      albumin: this.albumin,
+      Hb: this.Hb,
+      MeasuredOsm: this.MeasuredOsm,
+      Ur: this.Ur,
+      Gluc: this.Gluc
+    };
+  }
+
+  // plain object -> instance
+  static fromJSON(data) {
+    return new ABGclass(
+      data.pH,
+      data.PCO2,
+      data.Na,
+      data.K,
+      data.Cl,
+      data.HCO3,
+      data.CaTot,
+      data.iCa,
+      data.Mg,
+      data.phosphate,
+      data.lactate,
+      data.albumin,
+      data.Hb,
+      data.MeasuredOsm,
+      data.Ur,
+      data.Gluc
+    );
+  }
+
+  loadABGintoInputFields() {
+    debugg("Updating input fields");
+    // Get references to the input elements by their IDs
+    // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
+    pHValue.value = float(this.pH);
+    PCO2Value.value = float(this.PCO2);
+    HCO3Value.value = float(this.HCO3)
+    NaValue.value = float(this.Na);
+    KValue.value = float(this.K);
+    ClValue.value = float(this.Cl);
+    CaTotValue.value = float(this.CaTot);
+    iCaValue.value = float(this.iCa);
+    MgValue.value = float(this.Mg);
+    AlbuminValue.value = float(this.albumin);
+    PhosphateValue.value = float(this.phosphate);
+    LactateValue.value = float(this.lactate);
+    HbValue.value = float(this.Hb);
+    MeasuredOsmValue.value = float(this.MeasuredOsm);
+    UreaValue.value = float(this.Ur);
+    GlucoseValue.value = float(this.Gluc);
   }
 }

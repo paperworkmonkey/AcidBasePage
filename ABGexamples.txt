@@ -10,7 +10,7 @@
 	Lac	1.2 mmol/L
 	SaO2	94.4 %
 	Hb(tot)	72 g/L
-	iCa++	1.26 mmol/L
+	iCa	1.26 mmol/L
 	Alb	18 g/L
 	PO4	1.38 mmol/L
 	Mg	0.97 mmol/L
@@ -27,7 +27,7 @@
 	Lac	0.9 mmol/L
 	SaO2	98.0 %
 	Hb(tot)	90 g/L
-	iCa++	0.99 mmol/L
+	iCa	0.99 mmol/L
 	Alb	24 g/L; 24 g/L
 	PO4	0.68 mmol/L
 	Mg	0.81 mmol/L
@@ -44,8 +44,25 @@
 	Lac	0.8 mmol/L
 	SaO2	96.8 %
 	Hb(tot)	84 g/L
-	iCa++	1.25 mmol/L
+	iCa	1.25 mmol/L
 	Alb	28 g/L; 28 g/L
 	PO4	0.82 mmol/L
 	Mg	0.76 mmol/L
 
+pH 6.972
+PCO2 10.2
+PO2 9.19
+Na 132
+K 3.4
+Cl 102
+iCa 1.22
+Gluc 6.4
+Lac 10.1
+Hb(tot) 138
+BE -15.8
+SaO2 78.4	
+Bic 12.8
+Alb 31
+PO4 1.41
+Mg 0.85
+T2 resp failure - LRTI
