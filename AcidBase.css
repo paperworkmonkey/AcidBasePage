@@ -23,6 +23,7 @@ body {
     Arial;
   background: var(--bg);
   color: #111;
+  padding: 20px;
 }
 
 .top-row {
@@ -112,10 +113,6 @@ body {
   }
 }
 
-canvas {
-  display: inline-block;
-}
-
 .parent > div {
   display: flex;
   justify-content: left;
@@ -132,10 +129,11 @@ canvas {
 
 .parent {
   display: grid;
-  grid-template-columns: 75px 180px 180px 50px 150px;
+  grid-template-columns: max-content max-content max-content 60px max-content 400px 550px;
+  /* grid-template-columns: 75px 180px 180px 50px 150px; */
   grid-template-rows: repeat(17, 30px);
-  grid-column-gap: 5px;
-  grid-row-gap: 5px;
+  grid-column-gap: 2px;
+  grid-row-gap: 2px;
   margin: 5px;
   padding: 10px;
   /* border: 3px solid black; */
@@ -381,6 +379,33 @@ canvas {
 .divR16c {
   grid-area: 16 / 5 / 17 / 6;
 }
+.divInput1 {
+  grid-area: 1/6/3/7;
+}
+
+.divInput2 {
+  grid-area: 3/6/14/7;
+}
+
+.divInput3 {
+  align-content: top;
+  grid-area: 14/6/17/7;
+}
+
+.divSAdiagram {
+  grid-area: 1/7/17/8;
+}
+
+.divInterpretation {
+  grid-area: 17/1/18/7;
+  height: fit-content;
+}
+
+.form_button {
+  border-radius: 4px;
+  margin: 4px;
+  width: 120px;
+}
 
 .abg-form {
   display: flex;
@@ -392,6 +417,7 @@ canvas {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  border-radius: 4px;
 }
 
 .interpretation {

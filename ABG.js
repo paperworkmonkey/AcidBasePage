@@ -503,14 +503,18 @@ class ABGclass {
           row.HCO3 === HCO3disturbance,
       )?.meaning || "Pattern not recognised — consider mixed disorder";
 
-    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})`
+    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})`;
 
     debugg("int txt: " + this.interpretationText);
 
     //if (this.interpretationText.includes("metabolic acidosis")) {
-    if ((this.interpretationText.includes("metabolic acidosis")) || (this.pH < 7.35 && this.PCO2 < 6.0) || (this.HCO3 < 24)) {
+    if (
+      this.interpretationText.includes("metabolic acidosis") ||
+      (this.pH < 7.35 && this.PCO2 < 6.0) ||
+      this.HCO3 < 24
+    ) {
       debugg("Metabolic acidosis detected. Aniong gap is " + this.AnionGap);
-      this.interpretationText += "\nMetabolic acidosis present"
+      this.interpretationText += "\nMetabolic acidosis present";
       if (this.LactateEffect < -2) {
         this.interpretationText += "\nLactic acidosis.";
       }
@@ -555,7 +559,6 @@ class ABGclass {
       this.interpretationText;
 
     this.plotSiggardAndersson();
-    listABGtable();
   }
 
   plotSiggardAndersson() {
@@ -563,25 +566,65 @@ class ABGclass {
     debugg(img);
     debugg(canvas);
 
-    clear();
+    function mapValue(value, inMin, inMax, outMin, outMax) {
+      return ((value - inMin) * (outMax - outMin)) / (inMax - inMin) + outMin;
+    }
+    function constrain(value, min, max) {
+      return Math.max(min, Math.min(max, value));
+    }
 
-    // Draw border and image
-    stroke(0);
-    strokeWeight(2);
-    noFill();
-    rect(0, 0, width, height);
-    image(img, 0, 0, width, height);
+    // clear();
 
-    // Plot the point based on pH and HCO3
-    let plotXstart = (38 / 400) * width;
-    let plotYstart = (30 / 400) * height;
+    // // Draw border and image
+    // stroke(0);
+    // strokeWeight(2);
+    // noFill();
+    // rect(0, 0, width, height);
+    // image(img, 0, 0, width, height);
 
-    let plotWidth = ((400 - 10) / 400) * width;
-    let plotHeight = ((400 - 25) / 400) * height;
+    // // Plot the point based on pH and HCO3
+    // let plotXstart = (38 / 400) * width;
+    // let plotYstart = (30 / 400) * height;
 
-    let x = map(this.pH, 7.0, 7.8, plotXstart, plotWidth);
-    let y = map(this.HCO3, 0, 60, plotHeight, plotYstart);
+    // let plotWidth = ((400 - 10) / 400) * width;
+    // let plotHeight = ((400 - 25) / 400) * height;
 
+    // let x = map(this.pH, 7.0, 7.8, plotXstart, plotWidth);
+    // let y = map(this.HCO3, 0, 60, plotHeight, plotYstart);
+
+    // x = constrain(x, plotXstart, plotWidth);
+    // y = constrain(y, plotYstart, plotHeight);
+
+    // if (debugging) {
+    //   console.log(`Mapped coordinates: x=${x}, y=${y}`);
+    // }
+
+    // noFill();
+    // stroke(255, 0, 0);
+    // ellipse(x, y, 10, 10);
+
+    ctx.clearRect(0, 0, SAcanvas.width, SAcanvas.height);
+
+    // Draw border
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "black";
+    ctx.strokeRect(0, 0, SAcanvas.width, SAcanvas.height);
+
+    // Draw image (p5 image(img, 0, 0, width, height))
+    ctx.drawImage(img, 0, 0, SAcanvas.width, SAcanvas.height);
+
+    // Plot area offsets (same math as p5 version)
+    let plotXstart = (38 / 400) * SAcanvas.width;
+    let plotYstart = (30 / 400) * SAcanvas.height;
+
+    let plotWidth = ((400 - 10) / 400) * SAcanvas.width;
+    let plotHeight = ((400 - 25) / 400) * SAcanvas.height;
+
+    // map() replacements
+    let x = mapValue(this.pH, 7.0, 7.8, plotXstart, plotWidth);
+    let y = mapValue(this.HCO3, 0, 60, plotHeight, plotYstart);
+
+    // constrain() replacements
     x = constrain(x, plotXstart, plotWidth);
     y = constrain(y, plotYstart, plotHeight);
 
@@ -589,9 +632,12 @@ class ABGclass {
       console.log(`Mapped coordinates: x=${x}, y=${y}`);
     }
 
-    noFill();
-    stroke(255, 0, 0);
-    ellipse(x, y, 10, 10);
+    // Draw ellipse replacement (circle)
+    ctx.beginPath();
+    ctx.lineWidth = 2;
+    ctx.strokeStyle = "red";
+    ctx.arc(x, y, 5, 0, Math.PI * 2); // radius=5 => diameter=10
+    ctx.stroke();
   }
 
   drawGamblegram() {
@@ -619,7 +665,7 @@ class ABGclass {
       Hb: this.Hb,
       MeasuredOsm: this.MeasuredOsm,
       Ur: this.Ur,
-      Gluc: this.Gluc
+      Gluc: this.Gluc,
     };
   }
 
@@ -641,7 +687,7 @@ class ABGclass {
       data.Hb,
       data.MeasuredOsm,
       data.Ur,
-      data.Gluc
+      data.Gluc,
     );
   }
 
@@ -651,7 +697,7 @@ class ABGclass {
     // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
     pHValue.value = float(this.pH);
     PCO2Value.value = float(this.PCO2);
-    HCO3Value.value = float(this.HCO3)
+    HCO3Value.value = float(this.HCO3);
     NaValue.value = float(this.Na);
     KValue.value = float(this.K);
     ClValue.value = float(this.Cl);

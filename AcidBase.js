@@ -22,26 +22,39 @@ let HbValue;
 let MeasuredOsmValue;
 let UreaValue;
 let GlucoseValue;
+let ctx;
+let SAcanvas;
+
+// window.addEventListener("DOMContentLoaded", () => {
+//   const canvas = document.getElementById("nomogram");
+//   const ctx = canvas.getContext("2d");
+//   const width = canvas.width;
+//   const height = canvas.height;
+
+//   // ...rest of your code here...
+// });
 
 function preload() {
-  img = loadImage("Acid-base_nomogram.svg.png");
+  //img = loadImage("Acid-base_nomogram.svg.png");
   //ranges = loadTable("ranges.csv", "csv", "header");
   ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
 }
 
 function setup() {
-
   //if this is running in a localhost browser add a 'save as example' button
   //console.log("Location port", location.port)
   if (location.port == 5500) {
-    const ExButton = document.createElement("button")
+    const ExButton = document.createElement("button");
     ExButton.innerText = "Save as example";
     ExButton.id = "ExampleSaveButton";
     ExButton.onclick = saveAsExample;
     document.getElementById("button-column88").appendChild(ExButton);
   }
 
-  createCanvas(800, 800);
+  img = new Image();
+  img.src = "Acid-base_nomogram.svg.png";
+
+  // createCanvas(300, 300);
   debugg(ranges);
 
   ABG = new ABGclass();
@@ -53,6 +66,18 @@ function setup() {
     let text = document.getElementById("ABGinput").value;
     parseABG(text);
   });
+
+  //set up canvas (preparation for moving away from p5js)
+  // const justathing = document.createElement("P");
+  // justathing.innerText = "hello";
+  // console.log(justathing);
+  // document.getElementById("divSAdiag").appendChild(justathing);
+  SAcanvas = document.createElement("canvas");
+  SAcanvas.width = 500;
+  SAcanvas.height = 500;
+  SAcanvas.background = "white";
+  ctx = SAcanvas.getContext("2d");
+  document.getElementById("divSAdiag").appendChild(SAcanvas);
 
   // Get references to the input elements by their IDs
   // Ensure that your HTML has input elements with these exact IDs (e.g., <input id="pHValue">)
@@ -72,7 +97,6 @@ function setup() {
   MeasuredOsmValue = document.getElementById("MeasOsmValue");
   UreaValue = document.getElementById("UreaValue");
   GlucoseValue = document.getElementById("GlucoseValue");
-  console.log("pHValue: ", pHValue);
 }
 
 function updateResult() {
@@ -157,8 +181,7 @@ function readABG() {
   if (text.length > 20) {
     parseABG(text);
     debugg("read anyway!!!!");
-  }
-  else {
+  } else {
     console.log("Not enough in input box");
   }
 }
@@ -177,7 +200,8 @@ function parseABG(inputABG) {
   ABG.K = parseFloat(extractValue("K") || 0);
   ABG.Cl = parseFloat(extractValue("Cl") || 0);
   ABG.lactate = parseFloat(extractValue("Lac") || 0);
-  ABG.Hb = parseFloat(extractValue("Hb\\(tot\\)") || 0);
+  //ABG.Hb = parseFloat(extractValue("Hb\\(tot\\)") || 0);
+  ABG.Hb = extractValue("Hb") || 0;
   ABG.Gluc = parseFloat(extractValue("Gluc") || 0);
   ABG.albumin = parseFloat(extractValue("Alb") || 0);
   ABG.phosphate = parseFloat(extractValue("PO4") || 0);
@@ -198,11 +222,9 @@ function parseABG(inputABG) {
 }
 
 function saveABG() {
-  if (location.port = 5500) {
+  if ((location.port = 5500)) {
     //add line to ABGexamplesTable.csv
-
-  }
-  else {
+  } else {
     debugg("Stored an ABG");
     localStorage.setItem("abg", JSON.stringify(ABG.toJSON()));
     console.log(localStorage.getItem("abg"));
@@ -224,18 +246,17 @@ function loadABG() {
   ABG.drawGamblegram();
 }
 
-
 function resetABG() {
   console.log("resetting ABG");
 
-  ABG.pH = 7.40;
-  ABG.PCO2 = 5.00;
+  ABG.pH = 7.4;
+  ABG.PCO2 = 5.0;
   ABG.HCO3 = 25;
   ABG.Na = 138;
   ABG.K = 4.0;
   ABG.Cl = 102;
   ABG.CaTot = 2.4;
-  ABG.iCa = 0.9
+  ABG.iCa = 0.9;
   ABG.Mg = 1.0;
   ABG.albumin = 40;
   ABG.phosphate = 1.0;
@@ -260,185 +281,6 @@ function copyInterpretation() {
   debugg("Feed copied.");
 }
 
-function listABGtable() {
-  debugg("drawing ABG example table");
-  const old = document.getElementById("exampleTable");
-  if (old) old.remove();
-
-  const container = document.createElement("div");
-  container.id = "exampleTable";
-
-  // ---- CSS (only once) ----
-  if (!document.getElementById("abgTableStyles")) {
-    const style = document.createElement("style");
-    style.id = "abgTableStyles";
-    style.textContent = `
-      #exampleTable{
-        margin: 16px;
-        font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-      }
-
-      .abg-table {
-        border-collapse: collapse;
-        width: 100%;
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-        font-size: 14px;
-      }
-
-      .abg-table th, .abg-table td {
-        padding: 10px 12px;
-        border-bottom: 1px solid #e5e7eb;
-        white-space: nowrap;
-        text-align: left;
-      }
-
-      .abg-table thead th {
-        position: sticky;
-        top: 0;
-        background: #111827;
-        color: white;
-        text-align: left;
-        font-weight: 700;
-      }
-
-      .abg-table tbody th {
-        background: #f3f4f6;
-        font-weight: 700;
-        color: #111827;
-        position: sticky;
-        left: 0;
-        z-index: 1;
-      }
-
-      .abg-table tbody tr:nth-child(even) td {
-        background: #f9fafb;
-      }
-
-      .abg-col-header {
-        cursor: pointer;
-      }
-
-      .abg-col-header:hover {
-        background: #4f46e5;
-      }
-
-      .abg-col-header.selected {
-        background: #3730a3 !important;
-      }
-
-      .abg-selected-label {
-        margin: 10px 0 14px;
-        font-size: 14px;
-        font-weight: 600;
-        color: #111827;
-      }
-
-      /* Horizontal scroll if needed */
-      .abg-scroll {
-        overflow-x: auto;
-        border-radius: 12px;
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  // ---- label ----
-  const label = document.createElement("div");
-  label.className = "abg-selected-label";
-  label.textContent = "Selected ABG: (none)";
-  container.appendChild(label);
-
-  // ---- data ----
-  const rows = ABGexamples.getRows();
-  const columns = ABGexamples.columns;
-
-  // ABG IDs become the column headers
-  const abgIDs = rows.map((r) => r.getString("ABG"));
-
-  // Parameters become the left-side labels
-  const parameters = columns.filter((c) => c !== "ABG");
-
-  // ---- build table ----
-  const scrollWrap = document.createElement("div");
-  scrollWrap.className = "abg-scroll";
-
-  const htmlTable = document.createElement("table");
-  htmlTable.className = "abg-table";
-
-  // ---- THEAD ----
-  const thead = document.createElement("thead");
-  const headRow = document.createElement("tr");
-
-  // top-left corner cell
-  const corner = document.createElement("th");
-  corner.textContent = "Parameter";
-  headRow.appendChild(corner);
-
-  // ABG column headers
-  abgIDs.forEach((abgId, abgIndex) => {
-    const th = document.createElement("th");
-    th.textContent = abgId;
-    th.className = "abg-col-header";
-
-    th.addEventListener("click", () => {
-      // highlight selected header
-      htmlTable
-        .querySelectorAll(".abg-col-header")
-        .forEach((h) => h.classList.remove("selected"));
-      th.classList.add("selected");
-
-      selectedABG = abgId;
-      label.textContent = `Selected ABG: ${selectedABG}`;
-
-      // copy to textarea
-      const inputBox = document.getElementById("abgInputBox");
-      if (!inputBox) return;
-
-      // Make it "one parameter per line"
-      const lines = [];
-      parameters.forEach((param) => {
-        lines.push(`${param}: ${rows[abgIndex].getString(param)}`);
-      });
-
-      inputBox.value = lines.join("\n");
-    });
-
-    headRow.appendChild(th);
-  });
-
-  thead.appendChild(headRow);
-  htmlTable.appendChild(thead);
-
-  // ---- TBODY ----
-  const tbody = document.createElement("tbody");
-
-  parameters.forEach((param) => {
-    const tr = document.createElement("tr");
-
-    // parameter name in first column
-    const th = document.createElement("th");
-    th.textContent = param;
-    tr.appendChild(th);
-
-    // each ABG value across
-    rows.forEach((r) => {
-      const td = document.createElement("td");
-      td.textContent = r.getString(param);
-      tr.appendChild(td);
-    });
-
-    tbody.appendChild(tr);
-  });
-
-  htmlTable.appendChild(tbody);
-
-  scrollWrap.appendChild(htmlTable);
-  container.appendChild(scrollWrap);
-  document.body.appendChild(container);
-}
-
 function debugg(text) {
   if (debugging) {
     console.log(text);
@@ -447,5 +289,7 @@ function debugg(text) {
 
 function saveAsExample() {
   //let myAlertText = toString(ABG.pH);
-  alert(`Past this into ABG:\n${ABG.pH},${ABG.PCO2},${ABG.PO2},${ABG.Na},${ABG.K},${ABG.Cl},${ABG.HCO3}, BE,${ABG.Gluc}, ${ABG.lactate}, ${ABG.SaO2}, ${ABG.Hb},${ABG.iCa},${ABG.albumin}, ${ABG.phosphate}, ${ABG.Mg}, Context`);
+  alert(
+    `Past this into ABG:\n${ABG.pH},${ABG.PCO2},${ABG.PO2},${ABG.Na},${ABG.K},${ABG.Cl},${ABG.HCO3}, BE,${ABG.Gluc}, ${ABG.lactate}, ${ABG.SaO2}, ${ABG.Hb},${ABG.iCa},${ABG.albumin}, ${ABG.phosphate}, ${ABG.Mg}, Context`,
+  );
 }

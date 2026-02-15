@@ -37,15 +37,17 @@
     <a href="AcidBaseNotes.html" class="btn-link btn-primary" target="_self">Notes</a>
     <a href="examples.html" class="btn-link btn-ghost" target="_self">Examples</a>
     </div>
+
     <p>
-      Delta Ratio < 1: Suggests a concurrent normal anion gap metabolic acidosis
+      <h4>Delta values</h4>
+      Delta Ratio < 1: Suggests a normal anion gap metabolic acidosis
       (NAGMA).
       <br />
       Delta Ratio > 2: Suggests a concurrent metabolic alkalosis or pre-existing
       high bicarbonate.
     </p>
 
-    <h5>Stewart variables</h5>
+    <h4>Stewart variables</h4>
     <style>
   table {
     border-collapse: collapse; /* Merges borders into single lines */
@@ -57,58 +59,62 @@
     text-align: center;        /* Centres text horizontally */
     width: 33.33%;             /* Ensures all 3 columns have equal, wide width */
   }
+
+  .independent{
+    background-color: pink;
+  }
 </style>
     <table border="4">
-      <tr>
+      <tr class="independent">
         <!-- This cell spans 3 rows vertically -->
         <td rowspan="3" style="width: 5%;"><b>Independent variables</b></td>
         <td>PCO<sub>2</sub></sub></td>
+        <td>Total CO<sub>2</sub></td>
         <td>Lungs</td>
-        <td></td>
       </tr>
-      <tr>
+      <tr class="independent">
         <td>A<sub>TOT</sub></td>
-        <td>Liver</td>
         <td>Total weak non-volatile acids</td>
+        <td>Liver</td>
       </tr>
-      <tr>
+      <tr class="independent">
         <td>SID</td>
-        <td>Kidneys</td>
         <td>Strong ion difference</td>
+        <td>Kidneys</td>
       </tr>
            <tr>
         <!-- This cell spans 3 rows vertically -->
         <td rowspan="6" style="width: 5%;"><b>Dependent variables</b></td>
         <td>H<sup>+</sup></td>
         <td></td>
-        <td></td>
+        <td rowspan="2">Water dissociation</td>
       </tr>
       <tr>
         <td>OH<sup>-</sup></td>
         <td></td>
-        <td></td>
+        
       </tr>
       <tr>
         <td>HCO<sub>3</sub><sup>-</sup></td>
-        <td></td>
-        <td></td>
+        <td>Bicarbonate</td>
+        <td>Henderson-Hasselbach</td>
       </tr>
         <tr>
         <td>CO<sub>3</sub><sup>2-</sup></td>
-        <td></td>
+        <td>Carbonate</td>
         <td></td>
       </tr>
          </tr>
         <tr>
         <td>HA </td>
-        <td></td>
         <td>Weak acid</td>
+        <td></td>
       </tr>
          </tr>
         <tr>
         <td>A<sup>-</sup></td>
-        <td></td>
         <td>Weak anions</td>
+        <td></td>
       </tr>
       
     </table>
