@@ -43,23 +43,29 @@ function preload() {
 function setup() {
   //if this is running in a localhost browser add a 'save as example' button
   //console.log("Location port", location.port)
+
   if (location.port == 5500) {
+    //create a column div for the save example button
+    const thirdButtonColumn = document.createElement("div");
+    thirdButtonColumn.className = "button-column";
+    document.getElementById("divInput3").appendChild(thirdButtonColumn);
+
+    //create the save as example button
     const ExButton = document.createElement("button");
+    ExButton.className = "form_button";
     ExButton.innerText = "Save as example";
     ExButton.id = "ExampleSaveButton";
     ExButton.onclick = saveAsExample;
-    document.getElementById("button-column88").appendChild(ExButton);
+    thirdButtonColumn.appendChild(ExButton);
   }
 
   img = new Image();
   img.src = "Acid-base_nomogram.svg.png";
 
-  // createCanvas(300, 300);
   debugg(ranges);
 
   ABG = new ABGclass();
   debugg(ABG);
-  //console.table(ABGexamples);
 
   document.getElementById("myForm").addEventListener("submit", function (e) {
     e.preventDefault(); // stop page reload
@@ -68,10 +74,6 @@ function setup() {
   });
 
   //set up canvas (preparation for moving away from p5js)
-  // const justathing = document.createElement("P");
-  // justathing.innerText = "hello";
-  // console.log(justathing);
-  // document.getElementById("divSAdiag").appendChild(justathing);
   SAcanvas = document.createElement("canvas");
   SAcanvas.width = 500;
   SAcanvas.height = 500;
@@ -222,13 +224,9 @@ function parseABG(inputABG) {
 }
 
 function saveABG() {
-  if ((location.port = 5500)) {
-    //add line to ABGexamplesTable.csv
-  } else {
-    debugg("Stored an ABG");
-    localStorage.setItem("abg", JSON.stringify(ABG.toJSON()));
-    console.log(localStorage.getItem("abg"));
-  }
+  debugg("Stored an ABG");
+  localStorage.setItem("abg", JSON.stringify(ABG.toJSON()));
+  console.log(localStorage.getItem("abg"));
 }
 
 function loadABG() {
@@ -259,13 +257,13 @@ function resetABG() {
   ABG.iCa = 0.9;
   ABG.Mg = 1.0;
   ABG.albumin = 40;
-  ABG.phosphate = 1.0;
+  ABG.phosphate = 1.5;
   ABG.lactate = 1.0;
   ABG.Hb = 120;
   ABG.MeasuredOsm = 310;
   ABG.Ur = 6;
   ABG.Gluc = 6;
-  //document.getElementById("ABGinput").value = "";
+  document.getElementById("ABGinput").value = "";
 
   ABG.loadABGintoInputFields();
   ABG.calculate();
@@ -290,6 +288,6 @@ function debugg(text) {
 function saveAsExample() {
   //let myAlertText = toString(ABG.pH);
   alert(
-    `Past this into ABG:\n${ABG.pH},${ABG.PCO2},${ABG.PO2},${ABG.Na},${ABG.K},${ABG.Cl},${ABG.HCO3}, BE,${ABG.Gluc}, ${ABG.lactate}, ${ABG.SaO2}, ${ABG.Hb},${ABG.iCa},${ABG.albumin}, ${ABG.phosphate}, ${ABG.Mg}, Context`,
+    `Ctrl-C and paste this into ABG:\n${ABG.pH},${ABG.PCO2},${ABG.PO2},${ABG.Na},${ABG.K},${ABG.Cl},${ABG.HCO3}, BE,${ABG.Gluc}, ${ABG.lactate}, ${ABG.SaO2}, ${ABG.Hb},${ABG.iCa},${ABG.albumin}, ${ABG.phosphate}, ${ABG.Mg}, Context`,
   );
 }

@@ -76,6 +76,7 @@ class ABGclass {
     this.CO2asBicarb = 0.23 * this.PCO2 * Math.pow(10, this.pH - 6.1);
     this.PhosphateEffect = (1.1 - this.phosphate) * (0.309 * this.pH - 0.469);
 
+    // this.SIDe = this.CO2asBicarb + this.AlbuminEffect + this.PhosphateEffect;
     this.SIDe =
       2.46e-8 * (this.PCO2 / Math.pow(10, -this.pH)) +
       this.albumin * (0.123 * this.pH - 0.631) +
@@ -85,9 +86,6 @@ class ABGclass {
     this.SIG = this.SIDa - this.SIDe;
 
     //NaCl effect
-    // console.log(`Na ${this.Na}`);
-    // console.log(`Cl ${this.Cl}`);
-
     if (!this.Na) {
       this.NaEffect = NaN;
     } else {
@@ -373,7 +371,7 @@ class ABGclass {
         CO2: "low",
         HCO3: "low",
         meaning: "Partially compensated respiratory alkalosis",
-        metabolicAcidosis: false,
+        metabolicAcidosis: true,
       },
       {
         //done
@@ -415,7 +413,7 @@ class ABGclass {
         CO2: "low",
         HCO3: "low",
         meaning: "Compensated respiratory alkalosis",
-        metabolicAcidosis: false,
+        metabolicAcidosis: true,
       },
 
       {
@@ -503,7 +501,7 @@ class ABGclass {
           row.HCO3 === HCO3disturbance,
       )?.meaning || "Pattern not recognised — consider mixed disorder";
 
-    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})`;
+    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})\n`;
 
     debugg("int txt: " + this.interpretationText);
 
@@ -511,47 +509,50 @@ class ABGclass {
     if (
       this.interpretationText.includes("metabolic acidosis") ||
       (this.pH < 7.35 && this.PCO2 < 6.0) ||
-      this.HCO3 < 24
+      this.HCO3 < 24 ||
+      metabolicAcidosis == true
     ) {
       debugg("Metabolic acidosis detected. Aniong gap is " + this.AnionGap);
-      this.interpretationText += "\nMetabolic acidosis present";
-      if (this.LactateEffect < -2) {
-        this.interpretationText += "\nLactic acidosis.";
-      }
+      // this.interpretationText += "\nMetabolic acidosis present. ";
 
       if (this.AnionGap > 16) {
-        debugg("well AG is high ");
-        this.interpretationText += "\nHAGMA";
+        debugg("well, AG is high ");
+        this.interpretationText += "HAGMA";
 
         //Delta ratios
         if (this.DeltaRatio >= 2) {
-          this.interpretationText +=
-            "\nDelta Ratio > 2 suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.";
-        }
-        // else if (DeltaRatio > 1 && DeltaRatio < 2) {
-        //   this.interpretationText += "\nDelta ratio indeterminate."
-        // }
-        if (this.DeltaRatio < 1) {
-          this.interpretationText += "\nPure NAGMA";
+          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.`;
+        } else if (this.DeltaRatio > 1.0 && this.DeltaRatio < 2.0) {
+          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests uncomplicated HAGMA.`;
+        } else if (DeltaRatio >= 0.8 && DeltaRatio <= 1.0) {
+          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) unhelpful.`;
+        } else if (this.DeltaRatio > 0.4 && this.DeltaRatio < 0.8) {
+          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests mixed NAGMA and HAGMA.`;
+        } else if (this.DeltaRatio <= 0.4) {
+          this.interpretationText += `. Delta ratio (${this.DeltaRatio} suggest pure NAGMA`;
         }
 
         //osmolar gap
         if (this.OsmGap >= 16) {
           this.interpretationText +=
-            " Raised osmolar gap — consider toxic alcohol ingestion.";
+            ". Raised osmolar gap — consider toxic alcohol ingestion.";
         }
       } else if (this.AnionGap <= 16) {
         debugg("well AG is LOW!! ");
-        this.interpretationText += "\nNormal anion gap.";
+        this.interpretationText += "NAGMA.";
       }
     }
 
+    if (this.LactateEffect < -2) {
+      this.interpretationText += `\nLactic acidosis. Lactate effect ${this.LactateEffect.toFixed(1)} on sBE`;
+    }
+
     if (this.NaClEffect <= -4) {
-      this.interpretationText += "\nHyperchloraemic acidosis";
+      this.interpretationText += `\nHyperchloraemic acidosis. NaCl effect ${this.NaClEffect.toFixed(1)} on sBE`;
     }
 
     if (this.AlbuminEffect > 2) {
-      this.interpretationText += "\nHypoalbuminaemic alkalosis";
+      this.interpretationText += `\nHypoalbuminaemic alkalosis. Albumin effect ${this.AlbuminEffect.toFixed(1)} on sBE`;
     }
 
     debugg(this.interpretationText);
