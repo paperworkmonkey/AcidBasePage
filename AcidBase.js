@@ -61,24 +61,25 @@ function setup() {
     thirdButtonColumn.appendChild(ExButton);
 
     //add PageTop header
-    fetch("PageTop.html")
-      .then((response) => response.text())
-      .then((data) => {
-        document.getElementById("headerPlaceholder").innerHTML = data;
-
-        console.log("loaded");
-        const page = document.getElementById("solver");
-        console.log(page);
-
-        if (page) {
-          page.className = "btn-link btn-primary";
-          console.log("document loaded - primary trying");
-        }
-      });
 
     // const index = document.getElementById("index");
     // index.className = "btn-link btn-primary";
   }
+
+  fetch("PageTop.html")
+    .then((response) => response.text())
+    .then((data) => {
+      document.getElementById("headerPlaceholder").innerHTML = data;
+
+      console.log("loaded");
+      const page = document.getElementById("solver");
+      console.log(page);
+
+      if (page) {
+        page.className = "btn-link btn-primary";
+        console.log("document loaded - primary trying");
+      }
+    });
 
   img = new Image();
   img.src = "Acid-base_nomogram.svg.png";
