@@ -5,223 +5,262 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Clickable ABG Table → Copy Column</title>
 
-        <link rel="stylesheet" type="text/css" href="AcidBase.css" />
+    <link rel="stylesheet" type="text/css" href="AcidBase.css" />
+    <link rel="stylesheet" type="text/css" href="examples.css" />
     <link rel="icon" type="image/x-icon" href="/favicon.png" />
     <script src="libraries/p5.min.js"></script>
-    <script src="libraries/p5.sound.min.js"></script>
-  </head>
-
-    <style>
-      body {
-        font-family:   Inter,
-    system-ui,
-    -apple-system,
-    "Segoe UI",
-    Roboto,
-    "Helvetica Neue",
-    Arial;
-        padding: 20px;
-      }
-      h2 {
-        margin-top: 0;
-      }
-
-      table {
-        border-collapse: collapse;
-        width: 100%;
-        margin-bottom: 16px;
-      }
-
-      th,
-      td {
-        border: 1px solid #ccc;
-        padding: 8px;
-        text-align: left;
-        vertical-align: top;
-      }
-
-      thead th {
-        background: #f4f4f4;
-        cursor: pointer;
-        user-select: none;
-      }
-
-      thead th:hover {
-        background: #e9e9e9;
-      }
-
-      .selected {
-        background: #dbeafe !important;
-        font-weight: bold;
-      }
-
-      textarea {
-        width: 100%;
-        height: 320px;
-        font-family: monospace;
-        padding: 10px;
-        box-sizing: border-box;
-      }
-
-      button {
-        padding: 10px;
-        cursor: pointer;
-        width: 100%;
-        margin-top: 10px;
-      }
-
-      .hint {
-        margin: 10px 0 16px;
-        color: #555;
-      }
-    </style>
   </head>
   <body>
+    <div id="headerPlaceholder"></div>
 
-        <header class="top-row">
-      <a href="" class="brand" aria-label="Homepage">
-        <!-- <img src="ICUonlineLogo.png" alt="Site logo" width="48" height="48" /> -->
-        <span class="title">ICUonline</span>
-      </a>
-      <nav class="nav-links" role="navigation" aria-label="Top links">
-        <a href="index.html" class="btn-link btn-ghost" target="_self"
-          >Feed calculator</a
-        >
-        <a href="CodeFinder.html" class="btn-link btn-ghost" target="_self"
-          >ICNARC code finder</a
-        >
-        <a href="Disclaimer.html" class="btn-link btn-ghost" target="_self"
-          >Disclaimer</a
-        >
-      </nav>
-    </header>
-
-    <div class="firstRow">
-      <h4>Stewart Acid Base</h4>
-    <a href="index.html" class="btn-link btn-ghost" target="_self">ABG solver</a>
-    <a href="AcidBaseNotes.html" class="btn-link btn-ghost" target="_self">Notes</a>
-    <a href="examples.html" class="btn-link btn-primary" target="_self">Examples</a>
+    <h2>ABG examples</h2>
+    <div class="hint">
+      Click a column header to generate copy-ready text. Use the copy to
+      clipboard button and paste into input box in solver.
     </div>
 
+    <table id="abgTable">
+      <thead>
+        <tr>
+          <th colspan="2">Parameter</th>
+          <th data-col="0">Sample 1</th>
+          <th data-col="1">Sample 2</th>
+          <th data-col="2">Sample 3</th>
+          <th data-col="3">Sample 4</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
 
-    <h2>ABG Column Copier</h2>
-  <div class="hint">Click a column header (Sample 1–4) to generate copy-ready text.</div>
+    <textarea
+      id="output"
+      placeholder="Click a column header to populate this..."
+    ></textarea>
+    <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
-  <table id="abgTable">
-    <thead>
-      <tr>
-        <th colspan="2">Parameter</th>
-        <th data-col="0">Sample 1</th>
-        <th data-col="1">Sample 2</th>
-        <th data-col="2">Sample 3</th>
-        <th data-col="3">Sample 4</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+    <script>
+      let rows = []; // same structure as before, but loaded from CSV
+      let sampleNames = []; // ABG 1, ABG 2, etc.
 
-  <textarea id="output" placeholder="Click a column header to populate this..."></textarea>
-  <button onclick="copyToClipboard()">Copy to Clipboard</button>
+      const tbody = document.querySelector("#abgTable tbody");
+      const theadRow = document.querySelector("#abgTable thead tr");
+      const output = document.getElementById("output");
 
-  <script>
-    const rows = [
-      { name: "pH", units: "", values: ["7.436", "7.469", "7.428", "6.972"] },
-      { name: "PCO2", units: "kPa", values: ["4.71", "4.89", "4.35", "10.2"] },
-      { name: "PO2", units: "kPa", values: ["8.81", "11.6", "10.3", "9.19"] },
-      { name: "Na", units: "mmol/L", values: ["150", "134", "144", "132"] },
-      { name: "K", units: "mmol/L", values: ["3.5", "3.8", "3.0", "3.4"] },
-      { name: "Cl", units: "mmol/L", values: ["116", "106", "115", "102"] },
-      { name: "Bic", units: "mmol/L", values: ["24.1", "26.9", "22.4", "12.8"] },
-      { name: "BE", units: "mmol/L", values: ["-0.4", "2.8", "-2.4", "-15.8"] },
-      { name: "Gluc", units: "mmol/L", values: ["3.6", "4.8", "10.2", "6.4"] },
-      { name: "Lac", units: "mmol/L", values: ["1.2", "0.9", "0.8", "10.1"] },
-      { name: "SaO2", units: "%", values: ["94.4", "98.0", "96.8", "78.4"] },
-      { name: "Hb(tot)", units: "g/L", values: ["72", "90", "84", "138"] },
-      { name: "iCa", units: "mmol/L", values: ["1.26", "0.99", "1.25", "1.22"] },
-      { name: "Alb", units: "g/L", values: ["18", "24", "28", "31"] },
-      { name: "PO4", units: "mmol/L", values: ["1.38", "0.68", "0.82", "1.41"] },
-      { name: "Mg", units: "mmol/L", values: ["0.97", "0.81", "0.76", "0.85"] },
-      { name: "Notes", units: "", values: ["", "", "", "T2 resp failure - LRTI"] }
-    ];
-
-    const tbody = document.querySelector("#abgTable tbody");
-    const output = document.getElementById("output");
-
-    // Build table body
-    rows.forEach(row => {
-      const tr = document.createElement("tr");
-
-      const tdName = document.createElement("td");
-      tdName.textContent = row.name;
-      tr.appendChild(tdName);
-
-      const tdUnits = document.createElement("td");
-      tdUnits.textContent = row.units || "";
-      tr.appendChild(tdUnits);
-
-      row.values.forEach(v => {
-        const td = document.createElement("td");
-        td.textContent = v || "";
-        tr.appendChild(td);
-      });
-
-      tbody.appendChild(tr);
-    });
-
-    function clearSelected() {
-      document.querySelectorAll("#abgTable th, #abgTable td").forEach(el => {
-        el.classList.remove("selected");
-      });
-    }
-
-    function selectColumn(colIndex) {
-      clearSelected();
-
-      // Highlight header
-      const header = document.querySelector(`#abgTable th[data-col="${colIndex}"]`);
-      if (header) header.classList.add("selected");
-
-      // Highlight column cells (tbody)
-      document.querySelectorAll("#abgTable tbody tr").forEach(tr => {
-        // +2 because we now have 2 columns before sample data
-        const td = tr.children[colIndex + 2];
-        if (td) td.classList.add("selected");
-      });
-
-      // Generate output text: name, value, units
-      const lines = [];
-      rows.forEach(row => {
-        const val = row.values[colIndex];
-        if (val !== undefined && val !== null && val.toString().trim() !== "") {
-          lines.push(`${row.name}\t${val}\t${row.units || ""}`.trim());
-        }
-      });
-
-      output.value = lines.join("\n");
-    }
-
-    // Click handlers for headers
-    document.querySelectorAll("#abgTable thead th[data-col]").forEach(th => {
-      th.addEventListener("click", () => {
-        const col = parseInt(th.getAttribute("data-col"), 10);
-        selectColumn(col);
-      });
-    });
-
-    async function copyToClipboard() {
-      const text = output.value;
-      if (!text.trim()) return alert("Click a column first!");
-
-      try {
-        await navigator.clipboard.writeText(text);
-        alert("Copied!");
-      } catch (err) {
-        alert("Copy failed (your browser may block clipboard access).");
+      // ---- CSV LOADER ----
+      async function loadCSV(path) {
+        const res = await fetch(path);
+        const text = await res.text();
+        return parseCSV(text);
       }
-    }
 
-    // Default select Sample 1
-    selectColumn(0);
-  </script>
+      // Basic CSV parser that respects quotes
+      function parseCSV(text) {
+        const lines = text
+          .split(/\r?\n/)
+          .map((l) => l.trim())
+          .filter((l) => l.length);
+
+        const table = [];
+        for (const line of lines) {
+          table.push(parseCSVLine(line));
+        }
+        return table;
+      }
+
+      function parseCSVLine(line) {
+        const out = [];
+        let cur = "";
+        let inQuotes = false;
+
+        for (let i = 0; i < line.length; i++) {
+          const ch = line[i];
+
+          if (ch === '"' && line[i - 1] !== "\\") {
+            inQuotes = !inQuotes;
+            continue;
+          }
+
+          if (ch === "," && !inQuotes) {
+            out.push(cur.trim());
+            cur = "";
+          } else {
+            cur += ch;
+          }
+        }
+        out.push(cur.trim());
+        return out;
+      }
+
+      // ---- Convert CSV into your existing rows[] format ----
+      function buildRowsFromCSV(csvTable) {
+        // Header row
+        const headers = csvTable[0]; // e.g. ["ABG","pH","PCO2 kPa",...]
+        const dataRows = csvTable.slice(1);
+
+        // First column is sample name (ABG 1, ABG 2...)
+        sampleNames = dataRows.map((r) => r[0]);
+
+        // Each header after the first becomes a parameter row
+        // rows = [{name, units, values:[...]}, ...]
+        const built = [];
+
+        for (let col = 1; col < headers.length; col++) {
+          const rawHeader = headers[col];
+
+          // Extract name + units from header
+          // Examples:
+          // "PCO2 kPa" -> name=PCO2 units=kPa
+          // "Na  (mmol/L)" -> name=Na units=mmol/L
+          // "Context" -> name=Context units=""
+          const { name, units } = splitNameUnits(rawHeader);
+
+          const values = dataRows.map((r) => {
+            const v = r[col] ?? "";
+            // clean up NaN, blank, etc
+            if (!v) return "";
+            if (v.toLowerCase() === "nan") return "";
+            return v.replace(/^"|"$/g, "").trim();
+          });
+
+          built.push({ name, units, values });
+        }
+
+        return built;
+      }
+
+      function splitNameUnits(header) {
+        let h = header.trim();
+
+        // Case: "Na  (mmol/L)"
+        const parenMatch = h.match(/^(.+?)\s*\((.+?)\)\s*$/);
+        if (parenMatch) {
+          return {
+            name: parenMatch[1].trim(),
+            units: parenMatch[2].trim(),
+          };
+        }
+
+        // Case: "PCO2 kPa" or "PO2 kPa"
+        const spaceMatch = h.match(/^(.+?)\s+([a-zA-Z/%]+)$/);
+        if (spaceMatch && spaceMatch[1].length <= 8) {
+          return {
+            name: spaceMatch[1].trim(),
+            units: spaceMatch[2].trim(),
+          };
+        }
+
+        // Default: no units
+        return { name: h, units: "" };
+      }
+
+      // ---- Build table ----
+      function renderTable() {
+        tbody.innerHTML = "";
+
+        // Rebuild header row (Sample 1..N)
+        // Keep first "Parameter" colspan=2, then dynamic samples
+        theadRow.innerHTML = "";
+
+        const thParam = document.createElement("th");
+        thParam.colSpan = 2;
+        thParam.textContent = "Parameter";
+        theadRow.appendChild(thParam);
+
+        sampleNames.forEach((sample, i) => {
+          const th = document.createElement("th");
+          th.textContent = sample;
+          th.dataset.col = i;
+          theadRow.appendChild(th);
+        });
+
+        // Body
+        rows.forEach((row) => {
+          const tr = document.createElement("tr");
+
+          const tdName = document.createElement("td");
+          tdName.textContent = row.name;
+          tr.appendChild(tdName);
+
+          const tdUnits = document.createElement("td");
+          tdUnits.textContent = row.units || "";
+          tr.appendChild(tdUnits);
+
+          row.values.forEach((v) => {
+            const td = document.createElement("td");
+            td.textContent = v || "";
+            tr.appendChild(td);
+          });
+
+          tbody.appendChild(tr);
+        });
+
+        // Reattach click handlers for headers
+        document
+          .querySelectorAll("#abgTable thead th[data-col]")
+          .forEach((th) => {
+            th.addEventListener("click", () => {
+              const col = parseInt(th.getAttribute("data-col"), 10);
+              selectColumn(col);
+            });
+          });
+      }
+
+      function clearSelected() {
+        document
+          .querySelectorAll("#abgTable th, #abgTable td")
+          .forEach((el) => {
+            el.classList.remove("selected");
+          });
+      }
+
+      function selectColumn(colIndex) {
+        clearSelected();
+
+        const header = document.querySelector(
+          `#abgTable th[data-col="${colIndex}"]`,
+        );
+        if (header) header.classList.add("selected");
+
+        document.querySelectorAll("#abgTable tbody tr").forEach((tr) => {
+          const td = tr.children[colIndex + 2];
+          if (td) td.classList.add("selected");
+        });
+
+        const lines = [];
+        rows.forEach((row) => {
+          const val = row.values[colIndex];
+          if (
+            val !== undefined &&
+            val !== null &&
+            val.toString().trim() !== ""
+          ) {
+            lines.push(`${row.name}\t${val}\t${row.units || ""}`.trim());
+          }
+        });
+
+        output.value = lines.join("\n");
+      }
+
+      async function copyToClipboard() {
+        const text = output.value;
+        if (!text.trim()) return alert("Click a column first!");
+
+        try {
+          await navigator.clipboard.writeText(text);
+          //alert("Copied!");
+        } catch (err) {
+          alert("Copy failed (your browser may block clipboard access).");
+        }
+      }
+
+      // ---- INIT ----
+      (async function init() {
+        const csvTable = await loadCSV("ABGexamplesTable.csv");
+        rows = buildRowsFromCSV(csvTable);
+        renderTable();
+        selectColumn(0);
+      })();
+    </script>
+    <script src="examples.js"></script>
   </body>
 </html>

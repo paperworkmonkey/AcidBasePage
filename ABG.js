@@ -191,7 +191,7 @@ class ABGclass {
       document.getElementById("sBEHbPtBox").innerText = "";
     } else {
       document.getElementById("sBEHbPtBox").innerText = Number(
-        this.sBEHb50,
+        this.sBEHbPt,
       ).toFixed(1);
     }
 
@@ -499,9 +499,10 @@ class ABGclass {
           row.pH === pHdisturbance &&
           row.CO2 === PCO2disturbance &&
           row.HCO3 === HCO3disturbance,
-      )?.meaning || "Pattern not recognised — consider mixed disorder";
+      )?.meaning ||
+      `Pattern not recognised (pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance}) — consider mixed disorder. \n`;
 
-    this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})\n`;
+    //this.interpretationText += `\n(pH  ${pHdisturbance}, PCO2 ${PCO2disturbance}, bicarb ${HCO3disturbance})\n`;
 
     debugg("int txt: " + this.interpretationText);
 

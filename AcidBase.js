@@ -25,20 +25,21 @@ let GlucoseValue;
 let ctx;
 let SAcanvas;
 
-// window.addEventListener("DOMContentLoaded", () => {
-//   const canvas = document.getElementById("nomogram");
-//   const ctx = canvas.getContext("2d");
-//   const width = canvas.width;
-//   const height = canvas.height;
-
-//   // ...rest of your code here...
-// });
-
 function preload() {
   //img = loadImage("Acid-base_nomogram.svg.png");
   //ranges = loadTable("ranges.csv", "csv", "header");
   ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("loaded");
+  const index = document.getElementById("index");
+  console.log(index);
+  if (index) {
+    index.className = "btn-primary";
+    console.log("documenbt loaded - primary trying");
+  }
+});
 
 function setup() {
   //if this is running in a localhost browser add a 'save as example' button
@@ -57,6 +58,24 @@ function setup() {
     ExButton.id = "ExampleSaveButton";
     ExButton.onclick = saveAsExample;
     thirdButtonColumn.appendChild(ExButton);
+
+    //add PageTop header
+    fetch("PageTop.html")
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById("headerPlaceholder").innerHTML = data;
+
+        console.log("loaded");
+        const page = document.getElementById("solver");
+        console.log(page);
+        if (page) {
+          page.className = "btn-link btn-primary";
+          console.log("documenbt loaded - primary trying");
+        }
+      });
+
+    // const index = document.getElementById("index");
+    // index.className = "btn-link btn-primary";
   }
 
   img = new Image();

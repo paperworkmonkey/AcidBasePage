@@ -1,0 +1,80 @@
+<!-- Paste this just below body tag 
+     <div id="headerPlaceholder"></div>
+-->
+
+<header class="top-row">
+  <a href="" class="brand" aria-label="Homepage">
+    <img src="ICUonlineLogo.png" alt="Site logo" width="48" height="48" />
+    <span class="title">ICUonline</span>
+  </a>
+  <nav class="nav-links" role="navigation" aria-label="Top links">
+    <a
+      id="calculator"
+      href="index.html"
+      class="btn-link btn-ghost"
+      target="_self"
+      >Feed calculator</a
+    >
+    <a
+      id="codeFinder"
+      href="CodeFinder.html"
+      class="btn-link btn-ghost"
+      target="_self"
+      >ICNARC code finder</a
+    >
+    <a
+      id="disclaimer"
+      href="Disclaimer.html"
+      class="btn-link btn-ghost"
+      target="_self"
+      >Disclaimer</a
+    >
+    <a
+      id="feedback"
+      href="Feedback.html"
+      class="btn-link btn-ghost"
+      target="_self"
+      >Feedback</a
+    >
+  </nav>
+</header>
+
+<div class="firstRow">
+  <h4>Acid Base</h4>
+  <a id="solver" href="index.html" class="btn-link btn-ghost" target="_self"
+    >ABG solver</a
+  >
+
+  <a
+    id="examples"
+    href="examples.html"
+    class="btn-link btn-ghost"
+    target="_self"
+    >Examples</a
+  >
+
+  <a
+    id="notes"
+    href="AcidBaseNotes.html"
+    class="btn-link btn-ghost"
+    target="_self"
+    >Notes</a
+  >
+</div>
+
+<!-- 
+ADD TO SETUP;
+    //add PageTop header
+    fetch("PageTop.html")
+      .then((response) => response.text())
+      .then((data) => {
+        document.getElementById("headerPlaceholder").innerHTML = data;
+
+        console.log("loaded");
+        const page = document.getElementById("***add ID here***");
+        console.log(page);
+        if (index) {
+          page.className = "btn-link btn-primary";
+          console.log("documenbt loaded - primary trying");
+        }
+      }); -->
