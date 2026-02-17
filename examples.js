@@ -7,11 +7,12 @@ function setup() {
       document.getElementById("headerPlaceholder").innerHTML = data;
 
       console.log("loaded");
-      const index = document.getElementById("examples");
-      console.log(index);
-      if (index) {
-        index.className = "btn-link btn-primary";
-        console.log("documenbt loaded - primary trying");
+      const page = document.getElementById("examples");
+      console.log(page);
+
+      if (page) {
+        page.className = "btn-link btn-primary";
+        console.log("document loaded - primary trying");
       }
     });
 }

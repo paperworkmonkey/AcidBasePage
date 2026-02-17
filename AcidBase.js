@@ -31,15 +31,16 @@ function preload() {
   ABGexamples = loadTable("ABGexamplesTable.csv", "csv", "header");
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-  console.log("loaded");
-  const index = document.getElementById("index");
-  console.log(index);
-  if (index) {
-    index.className = "btn-primary";
-    console.log("documenbt loaded - primary trying");
-  }
-});
+// document.addEventListener("DOMContentLoaded", () => {
+//   console.log("loaded");
+//   const page = document.getElementById("index");
+//   console.log(page);
+
+//   if (page) {
+//     page.className = "btn-primary";
+//     console.log("documennt loaded - primary trying");
+//   }
+// });
 
 function setup() {
   //if this is running in a localhost browser add a 'save as example' button
@@ -68,9 +69,10 @@ function setup() {
         console.log("loaded");
         const page = document.getElementById("solver");
         console.log(page);
+
         if (page) {
           page.className = "btn-link btn-primary";
-          console.log("documenbt loaded - primary trying");
+          console.log("document loaded - primary trying");
         }
       });
 
