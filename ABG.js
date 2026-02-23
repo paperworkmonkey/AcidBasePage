@@ -53,7 +53,7 @@ class ABGclass {
 
   calculate() {
     //ionised calcium from total calcium:
-    if (!this.iCa || (this.iCa < 0.4 && this.CaTot > 0.5)) {
+    if (!this.iCa || (this.iCa < 0.3 && this.CaTot > 0.5)) {
       this.iCa = 0.25 * (0.9 + 2.2 * this.CaTot) - 0.03 * this.albumin;
     }
     debugg(`iCa ${this.iCa}`);
@@ -64,13 +64,7 @@ class ABGclass {
       this.Na - (this.Cl + this.HCO3) + 0.25 * (this.albumin - 40);
     this.NormalAG = 0.2 * this.albumin + 1.5 * this.phosphate + this.lactate; // in mmol/L
     this.SIDa =
-      this.Na +
-      this.K +
-      this.CaTot +
-      2 * this.Mg +
-      2 * this.iCa -
-      this.Cl -
-      this.lactate;
+      this.Na + this.K + 2 * this.Mg + 2 * this.iCa - this.Cl - this.lactate;
 
     this.AlbuminEffect = (0.123 * this.pH - 0.631) * (42 - this.albumin);
     this.CO2asBicarb = 0.23 * this.PCO2 * Math.pow(10, this.pH - 6.1);
@@ -78,7 +72,7 @@ class ABGclass {
 
     // this.SIDe = this.CO2asBicarb + this.AlbuminEffect + this.PhosphateEffect;
     this.SIDe =
-      2.46e-8 * (this.PCO2 / Math.pow(10, -this.pH)) +
+      this.CO2asBicarb +
       this.albumin * (0.123 * this.pH - 0.631) +
       this.phosphate * (0.309 * this.pH - 0.469);
 
@@ -317,7 +311,7 @@ class ABGclass {
       {
         //done
         pH: "low",
-        CsO2: "high",
+        CO2: "high",
         HCO3: "normal",
         meaning: "Uncompensated respiratory acidosis",
         metabolicAcidosis: false,
@@ -518,19 +512,21 @@ class ABGclass {
 
       if (this.AnionGap > 16) {
         debugg("well, AG is high ");
-        this.interpretationText += "HAGMA";
+        this.interpretationText += "\nHAGMA";
 
         //Delta ratios
-        if (this.DeltaRatio >= 2) {
-          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.`;
-        } else if (this.DeltaRatio > 1.0 && this.DeltaRatio < 2.0) {
-          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests uncomplicated HAGMA.`;
-        } else if (DeltaRatio >= 0.8 && DeltaRatio <= 1.0) {
-          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) unhelpful.`;
-        } else if (this.DeltaRatio > 0.4 && this.DeltaRatio < 0.8) {
-          this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests mixed NAGMA and HAGMA.`;
-        } else if (this.DeltaRatio <= 0.4) {
-          this.interpretationText += `. Delta ratio (${this.DeltaRatio} suggest pure NAGMA`;
+        if (this.HCO3 <= 20 || this.HCO3 >= 28) {
+          if (this.DeltaRatio >= 2) {
+            this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests a concurrent metabolic alkalosis or pre-existing high bicarbonate.`;
+          } else if (this.DeltaRatio > 1.0 && this.DeltaRatio < 2.0) {
+            this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests uncomplicated HAGMA.`;
+          } else if (DeltaRatio >= 0.8 && DeltaRatio <= 1.0) {
+            this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) unhelpful.`;
+          } else if (this.DeltaRatio > 0.4 && this.DeltaRatio < 0.8) {
+            this.interpretationText += `. Delta ratio (${this.DeltaRatio.toFixed(1)}) suggests mixed NAGMA and HAGMA.`;
+          } else if (this.DeltaRatio <= 0.4) {
+            this.interpretationText += `. Delta ratio (${this.DeltaRatio} suggest pure NAGMA`;
+          }
         }
 
         //osmolar gap
@@ -540,7 +536,7 @@ class ABGclass {
         }
       } else if (this.AnionGap <= 16) {
         debugg("well AG is LOW!! ");
-        this.interpretationText += "NAGMA.";
+        this.interpretationText += `\nNAGMA ${this.AnionGap}.`;
       }
     }
 
@@ -574,36 +570,6 @@ class ABGclass {
     function constrain(value, min, max) {
       return Math.max(min, Math.min(max, value));
     }
-
-    // clear();
-
-    // // Draw border and image
-    // stroke(0);
-    // strokeWeight(2);
-    // noFill();
-    // rect(0, 0, width, height);
-    // image(img, 0, 0, width, height);
-
-    // // Plot the point based on pH and HCO3
-    // let plotXstart = (38 / 400) * width;
-    // let plotYstart = (30 / 400) * height;
-
-    // let plotWidth = ((400 - 10) / 400) * width;
-    // let plotHeight = ((400 - 25) / 400) * height;
-
-    // let x = map(this.pH, 7.0, 7.8, plotXstart, plotWidth);
-    // let y = map(this.HCO3, 0, 60, plotHeight, plotYstart);
-
-    // x = constrain(x, plotXstart, plotWidth);
-    // y = constrain(y, plotYstart, plotHeight);
-
-    // if (debugging) {
-    //   console.log(`Mapped coordinates: x=${x}, y=${y}`);
-    // }
-
-    // noFill();
-    // stroke(255, 0, 0);
-    // ellipse(x, y, 10, 10);
 
     ctx.clearRect(0, 0, SAcanvas.width, SAcanvas.height);
 
