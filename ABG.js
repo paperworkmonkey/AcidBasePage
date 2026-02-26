@@ -49,6 +49,7 @@ class ABGclass {
     this.DeltaGap;
     this.DeltaRatio;
     this.interpretation;
+    this.OsmGap;
   }
 
   calculate() {
@@ -125,8 +126,9 @@ class ABGclass {
 
     //osm gap
     let OsmCalc = 2 * (this.Na + this.K) + this.Ur + this.Gluc;
+
     if (this.MeasuredOsm > 100) {
-      this.OsmGap = this.MeasuredOsm - this.OsmCalc;
+      this.OsmGap = this.MeasuredOsm - OsmCalc;
     } else {
       this.OsmGap = "";
     }
@@ -536,7 +538,7 @@ class ABGclass {
         }
       } else if (this.AnionGap <= 16) {
         debugg("well AG is LOW!! ");
-        this.interpretationText += `\nNAGMA ${this.AnionGap}.`;
+        this.interpretationText += `\nNAGMA - AG ${this.AnionGap.toFixed(1)}.`;
       }
     }
 

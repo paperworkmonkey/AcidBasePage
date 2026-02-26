@@ -71,13 +71,13 @@ function setup() {
     .then((data) => {
       document.getElementById("headerPlaceholder").innerHTML = data;
 
-      console.log("loaded");
+      //console.log("loaded");
       const page = document.getElementById("solver");
-      console.log(page);
+      //console.log(page);
 
       if (page) {
         page.className = "btn-link btn-primary";
-        console.log("document loaded - primary trying");
+        //console.log("document loaded - primary trying");
       }
     });
 
